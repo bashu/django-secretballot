@@ -1,6 +1,6 @@
 from django.template import loader, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from anonvoting.models import Vote
+from secretballot.models import Vote
 
 def vote(request, content_type, object_id, vote, token_func, 
               redirect_url=None, template_name=None, template_loader=loader,
