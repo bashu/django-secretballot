@@ -10,21 +10,21 @@ VOTE_CHOICES = (
 class Vote(models.Model):
     token = models.CharField(max_length=50)
     vote = models.SmallIntegerField(choices=VOTE_CHOICES)
-   
+
     # generic foreign key to a VotableModel
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
-    
+
     class Meta:
         unique_together = (('token', 'content_type', 'object_id'),)
-    
+
     def __unicode__(self):
         return '%s from %s on %s' % (self.get_vote_display(), self.token,
                                      self.content_object)
-    
+
 class VotableManager(models.Manager):
-    
+
     def get_query_set(self):
         db_table = self.model._meta.db_table
         pk_name = self.model._meta.pk.attname
@@ -42,24 +42,24 @@ class VotableManager(models.Manager):
         return self.get_query_set().extra(select={'user_vote': query},
                                           select_params=(token,))
 
-    
+
 class VotableModel(models.Model):
-    
+
     objects = VotableManager()
-    
+
     class Meta:
         abstract = True
 
     votes = generic.GenericRelation(Vote)
 
-    vote_total = property(lambda self: self.upvotes-self.downvotes)
-    
+    vote_total = property(lambda self: self.total_upvotes-self.total_downvotes)
+
     def add_vote(self, token, vote):
         voteobj, created = self.votes.get_or_create(token=token,
             defaults={'vote':vote, 'content_object':self})
         if not created:
             voteobj.vote = vote
             voteobj.save()
-        
+
     def remove_vote(self, token):
         self.votes.filter(token=token).delete()

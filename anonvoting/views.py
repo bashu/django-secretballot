@@ -1,5 +1,5 @@
 from django.template import loader, RequestContext
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from anonvoting.models import Vote
 
 def vote(request, content_type, object_id, vote, token_func, 
@@ -10,6 +10,8 @@ def vote(request, content_type, object_id, vote, token_func,
 
     # do the action
     if vote:
+        if content_type.model_class().objects.filter(pk=object_id).count() == 0:
+            raise Http404
         vobj,new = Vote.objects.get_or_create(content_type=content_type,
                                               object_id=object_id, token=token,
                                               defaults={'vote':vote})
