@@ -32,7 +32,7 @@ class VotableManager(models.Manager):
         downvote_query = '(SELECT COUNT(*) from anonvoting_vote WHERE vote=-1 AND object_id=%s.%s AND content_type_id=%s)' % (db_table, pk_name, content_type)
         upvote_query = '(SELECT COUNT(*) from anonvoting_vote WHERE vote=1 AND object_id=%s.%s AND content_type_id=%s)' % (db_table, pk_name, content_type)
         return super(VotableManager, self).get_query_set().extra(
-            select={'upvotes': upvote_query, 'downvotes': downvote_query})
+            select={'total_upvotes': upvote_query, 'total_downvotes': downvote_query})
 
     def from_token(self, token):
         db_table = self.model._meta.db_table
@@ -51,26 +51,9 @@ class VotableModel(models.Model):
         abstract = True
 
     votes = generic.GenericRelation(Vote)
+
+    vote_total = property(lambda self: self.upvotes-self.downvotes)
     
-    # store (downvotes, upvotes)
-    _vote_counts = None
-    def _get_vote_counts(self):
-        if not self._vote_counts:
-            votes = list(self.votes.values_list('vote', flat=True))
-            downvotes = votes.count(-1)
-            self._vote_counts = (downvotes, len(votes)-downvotes)
-        return self._vote_counts
-    vote_counts = property(_get_vote_counts)
-    vote_total = property(lambda self: self.vote_counts[1]-self.vote_counts[0])
-    downvote_total = property(lambda self: self.vote_counts[0])
-    upvote_total = property(lambda self: self.vote_counts[1])
-    
-    def get_vote(self, token):
-        try:
-            return self.votes.get(ip=token).vote
-        except models.DoesNotExist:
-            return None
-        
     def add_vote(self, token, vote):
         voteobj, created = self.votes.get_or_create(token=token,
             defaults={'vote':vote, 'content_object':self})
