@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ImproperlyConfigured
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
@@ -42,6 +43,11 @@ class VotableManager(models.Manager):
         query = '(SELECT vote from %s WHERE token=%%s AND object_id=%s.%s AND content_type_id=%s)' % (VOTE_TABLE, db_table, pk_name, content_type)
         return self.get_query_set().extra(select={'user_vote': query},
                                           select_params=(token,))
+
+    def from_request(self, request):
+        if not hasattr(request, 'secretballot_token'):
+            raise ImproperlyConfigured('To use secretballot a SecretBallotMiddleware must be installed. (see secretballot/middleware.py)')
+        return self.from_token(request.secretballot_token)
 
 
 class VotableModel(models.Model):

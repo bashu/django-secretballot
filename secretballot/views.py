@@ -1,12 +1,16 @@
 from django.template import loader, RequestContext
+from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from secretballot.models import Vote
 
-def vote(request, content_type, object_id, vote, token_func, 
+def vote(request, content_type, object_id, vote,  
               redirect_url=None, template_name=None, template_loader=loader,
               extra_context=None, context_processors=None, mimetype=None):
 
-    token = token_func(request)
+    # get the token from a SecretBallotMiddleware 
+    if not hasattr(request, 'secretballot_token'):
+        raise ImproperlyConfigured('To use secretballot a SecretBallotMiddleware must be installed. (see secretballot/middleware.py)')
+    token = request.secretballot_token
 
     # do the action
     if vote:
