@@ -1,9 +1,9 @@
-import hashlib
+from secretballot.models import Vote
+from functools import partial
 
-def ip_token(request):
-    return request.META['REMOTE_ADDR']
+def total_vote_limiter(request, content_type, object_id, vote, num):
+    return Vote.objects.filter(content_type=content_type, 
+                                token=request.secretballot_token).count() < num
 
-def ip_useragent_token(request):
-     s = ''.join((request.META['REMOTE_ADDR'], request.META['HTTP_USER_AGENT']))
-     return hashlib.md5(s).hexdigest()
-    
+def limit_total_votes(num_votes):
+    return partial(total_vote_limiter, num=num_votes)
