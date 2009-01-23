@@ -1,4 +1,7 @@
-import hashlib
+try:
+    from hashlib import md5
+except ImportError:
+    from md5 import md5
 
 class SecretBallotMiddleware(object):
     def process_request(self, request):
@@ -15,4 +18,4 @@ class SecretBallotIpMiddleware(SecretBallotMiddleware):
 class SecretBallotIpUseragentMiddleware(SecretBallotMiddleware):
     def generate_token(self, request):
         s = ''.join((request.META['REMOTE_ADDR'], request.META['HTTP_USER_AGENT']))
-        return hashlib.md5(s).hexdigest()
+        return md5(s).hexdigest()
