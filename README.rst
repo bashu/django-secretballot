@@ -68,6 +68,23 @@ vote_total:
 votes: 
     Manager to a list of all ``Vote`` objects related to the current model (typically doesn't need to be accessed directly)
 
+There is also an additional method on the Votable manager:
+
+from_request(self, request):
+    When called on a votable object's queryset will add a ``user_vote`` attribute that is the vote cast by the current 'user' (actually the token assigned to the request)
+
+For example::
+
+    def story_view(request, slug):
+        story = Story.objects.from_request(request).get(pk=slug)
+        # story has the following extra attributes
+        # user_vote: -1, 0, or +1
+        # total_upvotes: total number of +1 votes
+        # total_downvotes: total number of -1 votes
+        # vote_total: total_upvotes-total_downvotes
+        # votes: related object manager to get specific votes (rarely needed)
+
+
 tokens and SecretBallotMiddleware
 ---------------------------------
 
@@ -112,6 +129,8 @@ object_id:
     primary key of object to vote on
 vote:
     value of this vote (+1, 0, or -1) (0 deletes the vote)
+can_vote_test:
+    (optional) function that allows limiting if user can vote or not (see ``can_vote_test``)
 redirect_url:
     (optional) url to redirect to, if present will redirect instead of returning a normal HttpResponse
 template_name:
@@ -124,4 +143,17 @@ context_processors:
     (optional) list of context processors for this view
 mimetype:
     (optional) mimetype override
+
+
+can_vote_test
+'''''''''''''
+
+can_vote_test is an optional argument to the view that can be specified in the urlconf that is called before a vote is recorded for a user
+
+Example implementation of can_vote_test::
+
+    def only_three_votes(request, content_type, object_id, vote):
+        return Vote.objects.filter(content_type=content_type, token=request.secretballot_token).count() < 3
+
+All can_vote_test methods must take the non-optional parameters to ``secretballot.views.vote`` and should return True if the vote should be allowed.  If the vote is not allowed by default the view will return a 403, but it is also acceptable to raise a different exception.
 
