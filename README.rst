@@ -52,7 +52,7 @@ For example::
         timestamp = models.DateTimeField()
         ...
     
-    secretballot.enable_voting_on(Request)
+    secretballot.enable_voting_on(Story)
 
 Using voting-enabled models
 ---------------------------

@@ -31,6 +31,9 @@ def enable_voting_on(cls, manager_name='objects',
     def remove_vote(self, token):
         self.votes.filter(token=token).delete()
 
+    def get_total(self):
+        return getattr(self, upvotes_name) - getattr(self, downvotes_name)
+
     class VotableManager(models.Manager):
 
         def get_query_set(self):
@@ -59,6 +62,6 @@ def enable_voting_on(cls, manager_name='objects',
 
     cls.add_to_class(manager_name, VotableManager())
     cls.add_to_class(votes_name, generic.GenericRelation(Vote))
-    cls.add_to_class(total_name, property(lambda self: self.total_upvotes-self.total_downvotes))
+    cls.add_to_class(total_name, property(get_total))
     cls.add_to_class(add_vote_name, add_vote)
     cls.add_to_class(remove_vote_name, remove_vote)
