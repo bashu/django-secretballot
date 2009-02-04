@@ -1,9 +1,7 @@
 from django.db import models
-from django.core.exceptions import ImproperlyConfigured
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
-VOTE_TABLE = 'secretballot_vote'
 VOTE_CHOICES = (
     (+1, '+1'),
     (-1, '-1'),
