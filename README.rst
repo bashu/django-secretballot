@@ -36,37 +36,61 @@ settings.py
 * add ``secretballot`` to INSTALLED_APPS
 * add a secretballot middleware to MIDDLEWARE_CLASSES (see middleware section for details)
 
-Declaring 'Votable' Models
+Enabling voting for models
 --------------------------
 
-In order to attach the voting helpers to a particular class it is necessary to define a model that derives from secretballot.models.VotableModel rather than django.db.models.Model.  No other changes to the model are necessary.
-
-The only limitation is that the model does not define any of the following field names:
-* votes
-* total_upvotes
-* total_downvotes
-* vote_total
+In order to attach the voting helpers to a particular model it is enough to call ``secretballot.enable_voting_on`` passing the model class.
 
 For example::
 
-    from secretballot.models import VotableModel
+    from django.db import models
+    import secretballot
     
     class Story(VotableModel):
-        ... 
+        title = models.CharField(max_length=100)
+        description = models.CharField(max_length=200)
+        timestamp = models.DateTimeField()
+        ...
+    
+    secretballot.enable_voting_on(Request)
 
-Using 'Votable' Models
-----------------------
+Using voting-enabled models
+---------------------------
 
-Models that inherit from VotableModel inherit some extra field names:
+Once a model is 'voting-enabled' a number of special fields are available on all instances:
 
+Fields
+~~~~~~
+
+votes: 
+    Manager to of all ``Vote`` objects related to the current model (typically doesn't need to be accessed directly)
+    (can be renamed by passing ``votes_name`` parameter to ``enable_voting_on``)
 total_upvotes: 
     Total number of +1 votes
+    (can be renamed by passing ``upvotes_name`` parameter to ``enable_voting_on``)
 total_downvotes:
     Total number of -1 votes
+    (can be renamed by passing ``downvotes_name`` parameter to ``enable_voting_on``)
 vote_total:
     shortcut accessor for (total_upvotes-total_downvotes)
-votes: 
-    Manager to a list of all ``Vote`` objects related to the current model (typically doesn't need to be accessed directly)
+    (can be renamed by passing ``total_name`` parameter to ``enable_voting_on``)
+
+Functions
+~~~~~~~~~
+
+add_vote:
+    function that takes a token and a vote (+1 or -1) and adds or updates the vote for said token
+    (can be renamed by passing ``add_vote_name`` parameter to ``enable_voting_on``)
+remove_vote:
+    function that takes a token and removes the vote (if present) for said token
+    (can be renamed by passing ``remove_vote_name`` parameter to ``enable_voting_on``)
+
+Manager
+~~~~~~~
+
+A special manager is added that enables the inclusion of ``total_upvotes`` and ``total_downvotes`` as well as some extra functionality.
+
+This manager by default replaces the ``objects`` manager, but this can be altered by passing the ``manager_name`` parameter to ``enable_voting_on``.
 
 There is also an additional method on the Votable manager:
 
@@ -146,7 +170,7 @@ mimetype:
 
 
 can_vote_test
-'''''''''''''
+~~~~~~~~~~~~~
 
 can_vote_test is an optional argument to the view that can be specified in the urlconf that is called before a vote is recorded for a user
 
