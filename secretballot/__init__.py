@@ -1,6 +1,6 @@
 from secretballot.models import Vote
-from django.db import models
 from django.core.exceptions import ImproperlyConfigured
+from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
@@ -19,7 +19,8 @@ def enable_voting_on(cls, manager_name='objects',
                     downvotes_name='total_downvotes',
                     total_name='vote_total',
                     add_vote_name='add_vote',
-                    remove_vote_name='remove_vote'):
+                    remove_vote_name='remove_vote',
+                    base_manager=None):
 
     def add_vote(self, token, vote):
         voteobj, created = self.votes.get_or_create(token=token,
@@ -33,6 +34,12 @@ def enable_voting_on(cls, manager_name='objects',
 
     def get_total(self):
         return getattr(self, upvotes_name) - getattr(self, downvotes_name)
+
+    if base_manager is None:
+        if hasattr(cls, manager_name):
+            base_manager = getattr(cls, manager_name).__class__
+        else:
+            base_manager = models.Manager
 
     class VotableManager(models.Manager):
 
