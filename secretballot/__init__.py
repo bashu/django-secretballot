@@ -1,12 +1,10 @@
-from secretballot.models import Vote
 from django.core.exceptions import ImproperlyConfigured
-from django.db import models
+from django.db.models import Manager
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
-VOTE_TABLE = Vote._meta.db_table
-
 def limit_total_votes(num):
+    from secretballot.models import Vote
     def total_vote_limiter(request, content_type, object_id, vote):
         return Vote.objects.filter(content_type=content_type, 
                                token=request.secretballot_token).count() < num
@@ -21,6 +19,8 @@ def enable_voting_on(cls, manager_name='objects',
                     add_vote_name='add_vote',
                     remove_vote_name='remove_vote',
                     base_manager=None):
+    from secretballot.models import Vote
+    VOTE_TABLE = Vote._meta.db_table
 
     def add_vote(self, token, vote):
         voteobj, created = self.votes.get_or_create(token=token,
@@ -39,9 +39,9 @@ def enable_voting_on(cls, manager_name='objects',
         if hasattr(cls, manager_name):
             base_manager = getattr(cls, manager_name).__class__
         else:
-            base_manager = models.Manager
+            base_manager = Manager
 
-    class VotableManager(models.Manager):
+    class VotableManager(base_manager):
 
         def get_query_set(self):
             db_table = self.model._meta.db_table
