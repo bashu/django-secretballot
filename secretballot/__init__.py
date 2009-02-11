@@ -1,3 +1,8 @@
+__author__ = "James Turk (jturk@sunlightfoundation.com)"
+__version__ = "0.2.0"
+__copyright__ = "Copyright (c) 2009 Sunlight Labs"
+__license__ = "BSD"
+
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Manager
 from django.contrib.contenttypes.models import ContentType
