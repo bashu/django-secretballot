@@ -2,6 +2,8 @@ from django.template import loader, RequestContext
 from django.core.exceptions import ImproperlyConfigured
 from django.http import (HttpResponse, HttpResponseRedirect, Http404, 
                          HttpResponseForbidden)
+from django.db.models import Model, get_model
+from django.contrib.contenttypes.models import ContentType
 from secretballot.models import Vote
 
 def vote(request, content_type, object_id, vote, can_vote_test=None,
@@ -12,6 +14,15 @@ def vote(request, content_type, object_id, vote, can_vote_test=None,
     if not hasattr(request, 'secretballot_token'):
         raise ImproperlyConfigured('To use secretballot a SecretBallotMiddleware must be installed. (see secretballot/middleware.py)')
     token = request.secretballot_token
+
+    if isinstance(content_type, ContentType)
+        pass
+    elif isinstance(content_type, Model):
+        content_type = ContentType.objects.get_for_model(content_type)
+    elif isinstance(content_type, basestring) and '.' in content_type:
+        content_type = ContentType.objects.get(app_label=app, model__iexact=modelname)
+    else:
+        raise ValueError('content_type must be an instance of ContentType, a model, or "app.modelname" string')
 
     # do the action
     if vote:
