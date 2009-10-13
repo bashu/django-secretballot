@@ -46,7 +46,7 @@ For example::
     from django.db import models
     import secretballot
     
-    class Story(VotableModel):
+    class Story(models.Model):
         title = models.CharField(max_length=100)
         description = models.CharField(max_length=200)
         timestamp = models.DateTimeField()
