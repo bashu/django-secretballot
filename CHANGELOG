@@ -1,5 +1,5 @@
-0.3.0
-=====================
+0.2.1 - October 23 2009
+=======================
     - fix some documentation issues left from 0.1
     - make content_type more flexible (can now take a model, content_type, or 'app.model' string)
 
