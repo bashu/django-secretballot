@@ -11,7 +11,7 @@ class Vote(models.Model):
     token = models.CharField(max_length=50)
     vote = models.SmallIntegerField(choices=VOTE_CHOICES)
 
-    # generic foreign key to a VotableModel
+    # generic foreign key to the model being voted upon
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
