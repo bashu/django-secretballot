@@ -149,6 +149,8 @@ Depending on the parameters given the return value of this view varies:
 
 content_type:
     Class that voting is taking place on (a VotableModel-derived model)
+    May be an instance of ``django.contrib.contenttypes.models.ContentType``,
+    the Model class itself, or an "app.modelname" string.
 object_id:
     primary key of object to vote on
 vote:
