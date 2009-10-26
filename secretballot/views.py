@@ -15,7 +15,7 @@ def vote(request, content_type, object_id, vote, can_vote_test=None,
         raise ImproperlyConfigured('To use secretballot a SecretBallotMiddleware must be installed. (see secretballot/middleware.py)')
     token = request.secretballot_token
 
-    if isinstance(content_type, ContentType)
+    if isinstance(content_type, ContentType):
         pass
     elif isinstance(content_type, Model):
         content_type = ContentType.objects.get_for_model(content_type)
