@@ -2,7 +2,8 @@ from django.template import loader, RequestContext
 from django.core.exceptions import ImproperlyConfigured
 from django.http import (HttpResponse, HttpResponseRedirect, Http404, 
                          HttpResponseForbidden)
-from django.db.models import Model, get_model
+from django.db.models import get_model
+from django.db.models.base import ModelBase
 from django.contrib.contenttypes.models import ContentType
 from secretballot.models import Vote
 
@@ -17,7 +18,7 @@ def vote(request, content_type, object_id, vote, can_vote_test=None,
 
     if isinstance(content_type, ContentType):
         pass
-    elif isinstance(content_type, Model):
+    elif isinstance(content_type, ModelBase):
         content_type = ContentType.objects.get_for_model(content_type)
     elif isinstance(content_type, basestring) and '.' in content_type:
         content_type = ContentType.objects.get(app_label=app, model__iexact=modelname)
