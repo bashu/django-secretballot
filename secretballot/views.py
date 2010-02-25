@@ -21,6 +21,7 @@ def vote(request, content_type, object_id, vote, can_vote_test=None,
     elif isinstance(content_type, ModelBase):
         content_type = ContentType.objects.get_for_model(content_type)
     elif isinstance(content_type, basestring) and '.' in content_type:
+        app, modelname = content_type.split('.')
         content_type = ContentType.objects.get(app_label=app, model__iexact=modelname)
     else:
         raise ValueError('content_type must be an instance of ContentType, a model, or "app.modelname" string')
