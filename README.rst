@@ -18,14 +18,6 @@ python >= 2.4
 
 django >= 1.0
 
-Installation
-============
-
-To install run 
-
-    ``python setup.py install``
-
-which will install the application into the site-packages directory.
 
 Usage
 =====

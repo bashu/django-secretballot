@@ -1,3 +1,7 @@
+0.2.3 - March 29 2010
+=====================
+    - bugfixes, thanks to Gennadiy Potapov
+
 0.2.2 - October 26 2009
 =======================
     - fixed embarassing SyntaxError in vote
