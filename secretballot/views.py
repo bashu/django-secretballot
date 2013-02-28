@@ -68,7 +68,7 @@ def vote(request, content_type, object_id, vote, can_vote_test=None,
     else:
         votes = Vote.objects.filter(content_type=content_type,
                                     object_id=object_id).count()
-        body = "{'num_votes':%d}" % votes
+        body = '{"num_votes":%d}' % votes
 
     return HttpResponse(body, mimetype=mimetype)
 
