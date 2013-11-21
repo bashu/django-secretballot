@@ -4,7 +4,7 @@ long_description = open('README.rst').read()
 
 setup(
     name='django-secretballot',
-    version="0.2.3",
+    version="0.2.4",
     package_dir={'secretballot': 'secretballot'},
     packages=['secretballot'],
     description='Django anonymous voting application',
@@ -14,6 +14,10 @@ setup(
     url='http://github.com/sunlightlabs/django-secretballot/',
     long_description=long_description,
     platforms=["any"],
+    install_requires=[
+        "django",
+	"south",
+    ],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
