@@ -16,7 +16,7 @@ setup(
     platforms=["any"],
     install_requires=[
         "django",
-	"south",
+        "south",
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
