@@ -66,6 +66,10 @@ total_downvotes:
 vote_total:
     shortcut accessor for (total_upvotes-total_downvotes)
     (can be renamed by passing ``total_name`` parameter to ``enable_voting_on``)
+_secretballot_enabled
+    boolean indicating that secretballot is enabled (can be tested for with hasattr)
+    (cannot be renamed, exists for a reliable check that secretballot is available even if all
+     other fields were renamed)
 
 Functions
 ~~~~~~~~~

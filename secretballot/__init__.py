@@ -76,3 +76,4 @@ def enable_voting_on(cls, manager_name='objects',
     cls.add_to_class(total_name, property(get_total))
     cls.add_to_class(add_vote_name, add_vote)
     cls.add_to_class(remove_vote_name, remove_vote)
+    setattr(cls, '_secretballot_enabled', True)
