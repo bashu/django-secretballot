@@ -7,6 +7,7 @@ VOTE_CHOICES = (
     (-1, '-1'),
 )
 
+
 class Vote(models.Model):
     token = models.CharField(max_length=50)
     vote = models.SmallIntegerField(choices=VOTE_CHOICES)
@@ -15,14 +16,11 @@ class Vote(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True,
-                                      null=True)
-    updated_at = models.DateTimeField(auto_now=True, db_index=True,
-                                      null=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, db_index=True, null=True)
 
     class Meta:
         unique_together = (('token', 'content_type', 'object_id'),)
 
     def __unicode__(self):
-        return '%s from %s on %s' % (self.get_vote_display(), self.token,
-                                     self.content_object)
+        return '%s from %s on %s' % (self.get_vote_display(), self.token, self.content_object)

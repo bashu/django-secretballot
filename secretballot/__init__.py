@@ -8,28 +8,27 @@ from django.db.models import Manager
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
+
 def limit_total_votes(num):
     from secretballot.models import Vote
+
     def total_vote_limiter(request, content_type, object_id, vote):
-        return Vote.objects.filter(content_type=content_type, 
-                               token=request.secretballot_token).count() < num
+        return Vote.objects.filter(content_type=content_type,
+                                   token=request.secretballot_token).count() < num
     return total_vote_limiter
 
 
 def enable_voting_on(cls, manager_name='objects',
-                    votes_name='votes',
-                    upvotes_name='total_upvotes',
-                    downvotes_name='total_downvotes',
-                    total_name='vote_total',
-                    add_vote_name='add_vote',
-                    remove_vote_name='remove_vote',
-                    base_manager=None):
+                     votes_name='votes', upvotes_name='total_upvotes',
+                     downvotes_name='total_downvotes', total_name='vote_total',
+                     add_vote_name='add_vote', remove_vote_name='remove_vote',
+                     base_manager=None):
     from secretballot.models import Vote
     VOTE_TABLE = Vote._meta.db_table
 
     def add_vote(self, token, vote):
-        voteobj, created = self.votes.get_or_create(token=token,
-            defaults={'vote':vote, 'content_object':self})
+        voteobj, created = self.votes.get_or_create(token=token, defaults={'vote': vote,
+                                                                           'content_object': self})
         if not created:
             voteobj.vote = vote
             voteobj.save()
@@ -68,9 +67,9 @@ def enable_voting_on(cls, manager_name='objects',
 
         def from_request(self, request):
             if not hasattr(request, 'secretballot_token'):
-                raise ImproperlyConfigured('To use secretballot a SecretBallotMiddleware must be installed. (see secretballot/middleware.py)')
+                raise ImproperlyConfigured('To use secretballot a SecretBallotMiddleware must '
+                                           'be installed. (see secretballot/middleware.py)')
             return self.from_token(request.secretballot_token)
-
 
     cls.add_to_class(manager_name, VotableManager())
     cls.add_to_class(votes_name, generic.GenericRelation(Vote))
