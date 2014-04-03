@@ -15,6 +15,10 @@ class Vote(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True,
+                                      null=True)
+    updated_at = models.DateTimeField(auto_now=True, db_index=True,
+                                      null=True)
 
     class Meta:
         unique_together = (('token', 'content_type', 'object_id'),)

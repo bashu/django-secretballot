@@ -1,3 +1,6 @@
 MANIFEST
 build
 dist
+/ve/
+*.egg-info
+*.pyc
