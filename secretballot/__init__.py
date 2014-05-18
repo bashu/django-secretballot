@@ -47,6 +47,8 @@ def enable_voting_on(cls, manager_name='objects',
 
     class VotableManager(base_manager):
 
+        use_for_related_fields = True
+
         def get_query_set(self):
             db_table = self.model._meta.db_table
             pk_name = self.model._meta.pk.attname
