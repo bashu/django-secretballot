@@ -4,3 +4,4 @@ dist
 /ve/
 *.egg-info
 *.pyc
+.tox
