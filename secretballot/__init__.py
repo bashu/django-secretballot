@@ -47,6 +47,8 @@ def enable_voting_on(cls, manager_name='objects',
 
     class VotableManager(base_manager):
 
+        use_for_related_fields = True
+
         def get_query_set(self):
             db_table = self.model._meta.db_table
             pk_name = self.model._meta.pk.attname
@@ -71,6 +73,7 @@ def enable_voting_on(cls, manager_name='objects',
                                            'be installed. (see secretballot/middleware.py)')
             return self.from_token(request.secretballot_token)
 
+    cls.add_to_class('_default_manager', VotableManager())
     cls.add_to_class(manager_name, VotableManager())
     cls.add_to_class(votes_name, generic.GenericRelation(Vote))
     cls.add_to_class(total_name, property(get_total))
