@@ -49,13 +49,13 @@ def enable_voting_on(cls, manager_name='objects',
 
         use_for_related_fields = True
 
-        def get_query_set(self):
+        def get_queryset(self):
             db_table = self.model._meta.db_table
             pk_name = self.model._meta.pk.attname
             content_type = ContentType.objects.get_for_model(self.model).id
             downvote_query = '(SELECT COUNT(*) from %s WHERE vote=-1 AND object_id=%s.%s AND content_type_id=%s)' % (VOTE_TABLE, db_table, pk_name, content_type)
             upvote_query = '(SELECT COUNT(*) from %s WHERE vote=1 AND object_id=%s.%s AND content_type_id=%s)' % (VOTE_TABLE, db_table, pk_name, content_type)
-            return super(VotableManager, self).get_query_set().extra(
+            return super(VotableManager, self).get_queryset().extra(
                 select={upvotes_name: upvote_query,
                         downvotes_name: downvote_query})
 
@@ -64,8 +64,7 @@ def enable_voting_on(cls, manager_name='objects',
             pk_name = self.model._meta.pk.attname
             content_type = ContentType.objects.get_for_model(self.model).id
             query = '(SELECT vote from %s WHERE token=%%s AND object_id=%s.%s AND content_type_id=%s)' % (VOTE_TABLE, db_table, pk_name, content_type)
-            return self.get_query_set().extra(select={'user_vote': query},
-                                              select_params=(token,))
+            return self.get_queryset().extra(select={'user_vote': query}, select_params=(token,))
 
         def from_request(self, request):
             if not hasattr(request, 'secretballot_token'):
