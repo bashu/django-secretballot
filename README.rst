@@ -6,7 +6,7 @@ Django voting application that allows voting without a logged in user.
 
 Provides abstract base model for types that the user wishes to allow voting on as well as related utilities including generic views to ease the addition of 'anonymous' voting to a Django project.
 
-django-secretballot is a project of Sunlight Labs (c) 2009.
+django-secretballot is a project of Sunlight Labs (c) 2015.
 Written by James Turk <jturk@sunlightfoundation.com>
 
 Source: http://github.com/sunlightlabs/django-secretballot/
@@ -14,9 +14,9 @@ Source: http://github.com/sunlightlabs/django-secretballot/
 Requirements
 ============
 
-python >= 2.4
+python >= 2.7
 
-django >= 1.0
+django >= 1.7
 
 
 Usage
