@@ -4,6 +4,7 @@ from django.http import HttpRequest
 from secretballot.middleware import (SecretBallotMiddleware,
                                      SecretBallotIpMiddleware,
                                      SecretBallotIpUseragentMiddleware)
+from .models import Link
 
 
 class MiddlewareTestCase(TestCase):
@@ -55,3 +56,22 @@ class MiddlewareTestCase(TestCase):
         mw = SecretBallotMiddleware()
         with self.assertRaises(NotImplementedError):
             mw.process_request(HttpRequest())
+
+
+class TestBasicVoting(TestCase):
+
+    def setUp(self):
+        Link.objects.create(url='https://google.com')
+        self.google = Link.objects.all()[0]
+
+    def test_basic_voting(self):
+        assert self.google.vote_total == 0
+
+        assert self.add_vote('1.2.3.4', 1)
+        assert self.google.vote_total == 1
+
+        assert self.add_vote('1.2.3.5', 1)
+        assert self.google.vote_total == 2
+
+        assert self.add_vote('1.2.3.6', -1)
+        assert self.google.vote_total == 1

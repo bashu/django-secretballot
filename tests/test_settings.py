@@ -8,6 +8,7 @@ DATABASES = {
 }
 
 INSTALLED_APPS = (
+    'django.contrib.contenttypes',
     'secretballot',
     'tests',
 )
