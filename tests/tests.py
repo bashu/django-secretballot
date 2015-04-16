@@ -60,18 +60,15 @@ class MiddlewareTestCase(TestCase):
 
 class TestBasicVoting(TestCase):
 
-    def setUp(self):
-        Link.objects.create(url='https://google.com')
-        self.google = Link.objects.all()[0]
-
     def test_basic_voting(self):
-        assert self.google.vote_total == 0
+        l = Link.objects.create(url='https://google.com')
+        assert Link.objects.get().vote_total == 0
 
-        assert self.add_vote('1.2.3.4', 1)
-        assert self.google.vote_total == 1
+        l.add_vote('1.2.3.4', 1)
+        assert Link.objects.get().vote_total == 1
 
-        assert self.add_vote('1.2.3.5', 1)
-        assert self.google.vote_total == 2
+        l.add_vote('1.2.3.5', 1)
+        assert Link.objects.get().vote_total == 2
 
-        assert self.add_vote('1.2.3.6', -1)
-        assert self.google.vote_total == 1
+        l.add_vote('1.2.3.6', -1)
+        assert Link.objects.get().vote_total == 1
