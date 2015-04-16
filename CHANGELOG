@@ -1,3 +1,10 @@
+0.3.0 - April 16 2015
+=====================
+    - related_fields and get_object_or_404 fix from François Chapuis
+    - add property to check if secretballot is present on a class
+    - add indexed timestamps to votes via Simon de Han
+    - make response valid JSON for mimetype compatibility via Dan Drinkard
+
 0.2.3 - March 29 2010
 =====================
     - bugfixes, thanks to Gennadiy Potapov

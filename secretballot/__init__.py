@@ -1,6 +1,6 @@
 __author__ = "James Turk (jturk@sunlightfoundation.com)"
-__version__ = "0.2.3"
-__copyright__ = "Copyright (c) 2009 Sunlight Labs"
+__version__ = "0.3.0"
+__copyright__ = "Copyright (c) 2015 Sunlight Labs"
 __license__ = "BSD"
 
 from django.core.exceptions import ImproperlyConfigured
