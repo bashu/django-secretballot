@@ -27,15 +27,16 @@ def enable_voting_on(cls, manager_name='objects',
     VOTE_TABLE = Vote._meta.db_table
 
     def add_vote(self, token, vote):
-        voteobj, created = self.votes.get_or_create(token=token, defaults={'vote': vote,
+        voteobj, created = getattr(self, votes_name).get_or_create(token=token, defaults={'vote': vote,
                                                                            'content_object': self})
         if not created:
             voteobj.vote = vote
             voteobj.save()
 
     def remove_vote(self, token):
-        self.votes.filter(token=token).delete()
+        getattr(self, votes_name).filter(token=token).delete()
 
+    # gets added to the class as a property, not under this name
     def get_total(self):
         return getattr(self, upvotes_name) - getattr(self, downvotes_name)
 
