@@ -1,3 +1,10 @@
+0.4.0 - 
+====================
+    - drop South support
+    - drop support for Django < 1.7, add support for Django >= 1.7
+    - add Python 3 support
+    - add tests
+
 0.3.0 - April 16 2015
 =====================
     - related_fields and get_object_or_404 fix from François Chapuis
