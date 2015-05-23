@@ -13,4 +13,4 @@ INSTALLED_APPS = (
     'tests',
 )
 
-
+MIDDLEWARE_CLASSES = ()
