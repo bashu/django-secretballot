@@ -55,11 +55,12 @@ def vote(request, content_type, object_id, vote, can_vote_test=None,
         c = RequestContext(request, {'content_obj': content_obj}, context_processors)
 
         # copy extra_context into context, calling any callables
-        for k, v in extra_context.items():
-            if callable(v):
-                c[k] = v()
-            else:
-                c[k] = v
+        if extra_context:
+            for k, v in extra_context.items():
+                if callable(v):
+                    c[k] = v()
+                else:
+                    c[k] = v
 
         t = template_loader.get_template(template_name)
         body = t.render(c)
