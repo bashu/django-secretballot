@@ -1,10 +1,13 @@
-from django.test import TestCase
-from django.http import HttpRequest
+from django.test import TestCase, Client
+from django.http import HttpRequest, Http404, HttpResponseForbidden
+from django.core.exceptions import ImproperlyConfigured
+from django.contrib.contenttypes.models import ContentType
 
 from secretballot.middleware import (SecretBallotMiddleware,
                                      SecretBallotIpMiddleware,
                                      SecretBallotIpUseragentMiddleware)
 from .models import Link, WeirdLink
+from secretballot import views
 
 
 class MiddlewareTestCase(TestCase):
@@ -142,3 +145,69 @@ class TestVotingWithRenamedFields(TestCase):
         assert l.total_downvs == 1
         assert l.vs.all()
         assert l._secretballot_enabled is True
+
+
+class TestVoteView(TestCase):
+
+    def _req(self):
+        r = HttpRequest()
+        r.secretballot_token = '1.2.3.4'
+        return r
+
+    def test_no_token(self):
+        r = HttpRequest()
+        self.assertRaises(ImproperlyConfigured, views.vote, r, Link, 1, 1)
+
+    def test_bad_content_type(self):
+        r = self._req()
+        # invalid content_type
+        self.assertRaises(ValueError, views.vote, r, 0, 1, 1)
+
+    def test_model_content_type(self):
+        r = self._req()
+        l = Link.objects.create(url='http://google.com')
+        views.vote(r, Link, l.id, 1)
+        assert Link.objects.get().vote_total == 1
+
+    def test_string_content_type(self):
+        r = self._req()
+        l = Link.objects.create(url='http://google.com')
+        views.vote(r, 'tests.Link', l.id, 1)
+        assert Link.objects.get().vote_total == 1
+
+    def test_content_type_content_type(self):
+        r = self._req()
+        l = Link.objects.create(url='http://google.com')
+        ctype = ContentType.objects.get(model='link')
+        views.vote(r, ctype, l.id, 1)
+        assert Link.objects.get().vote_total == 1
+
+    def test_vote_404(self):
+        r = self._req()
+        self.assertRaises(Http404, views.vote, r, Link, 1, 1)
+
+    def test_can_vote_test(self):
+        r = self._req()
+        l = Link.objects.create(url='http://google.com')
+        def can_vote_test(request, content_type, object_id, vote):
+            return True
+        views.vote(r, Link, 1, 1, can_vote_test=can_vote_test)
+        def never(request, content_type, object_id, vote):
+            return False
+        forbidden = views.vote(r, Link, 1, 1, can_vote_test=never)
+        self.assertEquals(forbidden.status_code, 403)
+
+    def test_vote_update(self):
+        pass
+
+    def test_vote_delete(self):
+        pass
+
+    def test_vote_redirect(self):
+        pass
+
+    def test_vote_template(self):
+        pass
+
+    def test_vote_default_json(self):
+        pass
