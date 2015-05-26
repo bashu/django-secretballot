@@ -1,9 +1,9 @@
-0.4.0 - 
+0.4.0 - 26 May 2015
 ====================
     - drop South support
     - drop support for Django < 1.7, add support for Django >= 1.7
     - add Python 3 support
-    - add tests
+    - add a ton of tests
     - fix bug if vote_name was set in enable_voting_on
 
 0.3.0 - April 16 2015

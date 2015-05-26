@@ -9,14 +9,13 @@ setup(
     packages=['secretballot'],
     description='Django anonymous voting application',
     author='James Turk',
-    author_email='jturk@sunlightfoundation.com',
+    author_email='james.p.turk@gmail.com',
     license='BSD License',
-    url='http://github.com/sunlightlabs/django-secretballot/',
+    url='http://github.com/jamesturk/django-secretballot/',
     long_description=long_description,
     platforms=["any"],
     install_requires=[
         "django",
-        "south",
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -26,5 +25,9 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Environment :: Web Environment',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
     ],
 )

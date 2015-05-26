@@ -2,14 +2,20 @@
 django-secretballot
 ===================
 
+.. image:: https://travis-ci.org/jamesturk/django-secretballot.svg?branch=master
+    :target: https://travis-ci.org/jamesturk/django-secretballot
+
+.. image:: https://img.shields.io/pypi/v/django-secretballot.svg
+    :target: https://pypi.python.org/pypi/django-secretballot
+
+
 Django voting application that allows voting without a logged in user.
 
 Provides abstract base model for types that the user wishes to allow voting on as well as related utilities including generic views to ease the addition of 'anonymous' voting to a Django project.
 
-django-secretballot is a project of Sunlight Labs (c) 2015.
-Written by James Turk <jturk@sunlightfoundation.com>
+Written by James Turk <james.p.turk@gmail.com>
 
-Source: http://github.com/sunlightlabs/django-secretballot/
+Source: http://github.com/jamesturk/django-secretballot/
 
 Requirements
 ============
