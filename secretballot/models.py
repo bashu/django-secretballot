@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.utils.encoding import python_2_unicode_compatible
 
 VOTE_CHOICES = (
     (+1, '+1'),
@@ -8,6 +9,7 @@ VOTE_CHOICES = (
 )
 
 
+@python_2_unicode_compatible
 class Vote(models.Model):
     token = models.CharField(max_length=50)
     vote = models.SmallIntegerField(choices=VOTE_CHOICES)
@@ -22,5 +24,5 @@ class Vote(models.Model):
     class Meta:
         unique_together = (('token', 'content_type', 'object_id'),)
 
-    def __unicode__(self):
-        return '%s from %s on %s' % (self.get_vote_display(), self.token, self.content_object)
+    def __str__(self):
+        return '{} from {} on {}'.format(self.get_vote_display(), self.token, self.content_object)
