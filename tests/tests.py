@@ -1,3 +1,4 @@
+import json
 from django.test import TestCase, Client
 from django.http import HttpRequest, Http404, HttpResponseForbidden
 from django.core.exceptions import ImproperlyConfigured
@@ -198,16 +199,37 @@ class TestVoteView(TestCase):
         self.assertEquals(forbidden.status_code, 403)
 
     def test_vote_update(self):
-        pass
+        r = self._req()
+        l = Link.objects.create(url='http://google.com')
+        views.vote(r, Link, l.id, 1)
+        views.vote(r, Link, l.id, -1)       # update
+        assert Link.objects.get().vote_total == -1
 
     def test_vote_delete(self):
-        pass
+        r = self._req()
+        l = Link.objects.create(url='http://google.com')
+        views.vote(r, Link, l.id, 1)
+        views.vote(r, Link, l.id, 0)       # delete
+        assert Link.objects.get().vote_total == 0
 
     def test_vote_redirect(self):
-        pass
+        r = self._req()
+        l = Link.objects.create(url='http://google.com')
+        resp = views.vote(r, Link, l.id, 1, redirect_url='/thanks/')
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.url, '/thanks/')
 
     def test_vote_template(self):
-        pass
+        r = self._req()
+        l = Link.objects.create(url='http://google.com')
+        resp = views.vote(r, Link, l.id, 1, template_name='vote.html')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn(b'voted', resp.content)
+        # TODO: test extra context and context processors?
 
     def test_vote_default_json(self):
-        pass
+        r = self._req()
+        l = Link.objects.create(url='http://google.com')
+        resp = views.vote(r, Link, l.id, 1)
+        self.assertEqual(resp.status_code, 200)
+        assert json.loads(resp.content.decode('utf8'))['num_votes'] == 1

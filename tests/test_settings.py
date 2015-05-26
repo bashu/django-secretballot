@@ -1,3 +1,4 @@
+import os
 SECRET_KEY = 'tests'
 
 DATABASES = {
@@ -12,5 +13,7 @@ INSTALLED_APPS = (
     'secretballot',
     'tests',
 )
+
+TEMPLATE_DIRS = (os.path.dirname(__file__),)
 
 MIDDLEWARE_CLASSES = ()
