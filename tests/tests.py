@@ -1,6 +1,6 @@
 import json
-from django.test import TestCase, Client
-from django.http import HttpRequest, Http404, HttpResponseForbidden
+from django.test import TestCase
+from django.http import HttpRequest, Http404
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.contenttypes.models import ContentType
 
@@ -197,6 +197,14 @@ class TestVoteView(TestCase):
             return False
         forbidden = views.vote(r, Link, 1, 1, can_vote_test=never)
         self.assertEquals(forbidden.status_code, 403)
+
+    def test_vote_get(self):
+        r = self._req()
+        l = Link.objects.create(url='http://google.com')
+        views.vote(r, Link, l.id, 1)
+        resp = views.vote(r, Link, l.id, None)
+        self.assertEqual(resp.status_code, 200)
+        assert json.loads(resp.content.decode('utf8'))['num_votes'] == 1
 
     def test_vote_update(self):
         r = self._req()
