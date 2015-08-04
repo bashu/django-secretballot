@@ -11,7 +11,7 @@ setup(
     author='James Turk',
     author_email='james.p.turk@gmail.com',
     license='BSD License',
-    url='http://github.com/jamesturk/django-secretballot/',
+    url='http://github.com/eugena/django-secretballot/',
     long_description=long_description,
     platforms=["any"],
     install_requires=[
