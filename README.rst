@@ -20,9 +20,7 @@ Source: http://github.com/jamesturk/django-secretballot/
 Requirements
 ============
 
-python >= 2.7
-
-django >= 1.7
+django >= 1.8
 
 
 Usage
