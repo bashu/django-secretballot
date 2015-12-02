@@ -2,9 +2,10 @@ language: python
 python:
     - "2.7"
     - "3.4"
+    - "3.5"
 env:
-    - DJANGO_PACKAGE="Django>=1.7,<1.8"
     - DJANGO_PACKAGE="Django>=1.8,<1.9"
+    - DJANGO_PACKAGE="Django>=1.9,<1.10"
 install: pip install $DJANGO_PACKAGE
 script: ./runtests.py
 notifications:
