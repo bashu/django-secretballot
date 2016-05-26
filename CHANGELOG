@@ -1,3 +1,7 @@
+next
+====
+    - add migrations
+
 0.5.0 - 1 December 2015
 =======================
     - drop South support
