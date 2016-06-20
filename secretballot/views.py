@@ -51,7 +51,11 @@ def vote(request, content_type, object_id, vote, can_vote_test=None,
     if redirect_url:
         return HttpResponseRedirect(redirect_url)
     elif template_name:
-        content_obj = content_type.get_object_for_this_type(pk=object_id)
+        # get_object_for_this_type uses _base_manager, but we only set
+        # _default_manager. Drop to lower level API.
+        content_obj = content_type.model_class()._default_manager.using(
+            content_type._state.db
+        ).get(pk=object_id)
         c = RequestContext(request, {'content_obj': content_obj}, context_processors)
 
         # copy extra_context into context, calling any callables

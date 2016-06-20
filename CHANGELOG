@@ -1,6 +1,7 @@
 next
 ====
     - add migrations
+    - fix case where object is not fetched through correct manager
 
 0.5.0 - 1 December 2015
 =======================
