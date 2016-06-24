@@ -7,6 +7,7 @@ setup(
     version="0.5.0",
     package_dir={'secretballot': 'secretballot'},
     packages=['secretballot'],
+    include_package_data=True,
     description='Django anonymous voting application',
     author='James Turk',
     author_email='james.p.turk@gmail.com',
