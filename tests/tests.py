@@ -225,6 +225,7 @@ class TestVoteView(TestCase):
         resp = views.vote(r, Link, l.id, 1, template_name='vote.html')
         self.assertEqual(resp.status_code, 200)
         self.assertIn(b'voted', resp.content)
+        self.assertIn(b'total_upvotes=1', resp.content)
         # TODO: test extra context and context processors?
 
     def test_vote_default_json(self):
