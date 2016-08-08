@@ -1,12 +1,11 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 long_description = open('README.rst').read()
 
 setup(
     name='django-secretballot',
     version="0.5.0",
-    package_dir={'secretballot': 'secretballot'},
-    packages=['secretballot'],
+    packages=find_packages(),
     include_package_data=True,
     description='Django anonymous voting application',
     author='James Turk',
