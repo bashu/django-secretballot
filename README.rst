@@ -32,6 +32,10 @@ settings.py
 * add ``secretballot`` to INSTALLED_APPS
 * add a secretballot middleware to MIDDLEWARE_CLASSES (see middleware section for details)
 
+migrations
+----------
+* run ``./manage.py migrate``
+
 Enabling voting for models
 --------------------------
 
