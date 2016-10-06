@@ -1,5 +1,5 @@
-next
-====
+0.5.1 - 6 October 2016
+======================
     - add migrations
     - fix case where object is not fetched through correct manager
 

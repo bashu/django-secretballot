@@ -4,7 +4,7 @@ long_description = open('README.rst').read()
 
 setup(
     name='django-secretballot',
-    version="0.5.0",
+    version="0.5.1",
     packages=find_packages(),
     include_package_data=True,
     description='Django anonymous voting application',
