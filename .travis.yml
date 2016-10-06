@@ -6,6 +6,7 @@ python:
 env:
     - DJANGO_PACKAGE="Django>=1.8,<1.9"
     - DJANGO_PACKAGE="Django>=1.9,<1.10"
+    - DJANGO_PACKAGE="Django>=1.10,<1.11"
 install: pip install $DJANGO_PACKAGE
 script: PYTHONPATH=. DJANGO_SETTINGS_MODULE=tests.test_settings django-admin test
 notifications:
