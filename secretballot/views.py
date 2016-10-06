@@ -56,7 +56,7 @@ def vote(request, content_type, object_id, vote, can_vote_test=None,
         content_obj = content_type.model_class()._default_manager.using(
             content_type._state.db
         ).get(pk=object_id)
-        c = RequestContext(request, {'content_obj': content_obj}, context_processors)
+        c = {'content_obj': content_obj}
 
         # copy extra_context into context, calling any callables
         if extra_context:
@@ -67,7 +67,7 @@ def vote(request, content_type, object_id, vote, can_vote_test=None,
                     c[k] = v
 
         t = template_loader.get_template(template_name)
-        body = t.render(c)
+        body = t.render(c, request)
     else:
         votes = Vote.objects.filter(content_type=content_type, object_id=object_id).count()
         body = '{"num_votes":%d}' % votes

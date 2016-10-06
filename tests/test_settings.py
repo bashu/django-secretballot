@@ -15,6 +15,14 @@ INSTALLED_APPS = (
     'tests',
 )
 
-TEMPLATE_DIRS = (os.path.dirname(__file__),)
+
+TEMPLATES = [
+{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'APP_DIRS': True,
+    'DIRS': [os.path.dirname(__file__)],
+},
+]
+
 
 MIDDLEWARE_CLASSES = ()
