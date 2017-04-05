@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 from django.test import TestCase, Client
 from django.http import HttpRequest, Http404, HttpResponseForbidden
@@ -60,6 +61,16 @@ class MiddlewareTestCase(TestCase):
         mw = SecretBallotMiddleware()
         with self.assertRaises(NotImplementedError):
             mw.process_request(HttpRequest())
+
+    def test_unicode_token(self):
+        mw = SecretBallotIpUseragentMiddleware()
+        r = HttpRequest()
+        r.META['REMOTE_ADDR'] = '1.2.3.4'
+        r.META['HTTP_USER_AGENT'] = u"Orange España"
+        mw.process_request(r)
+        token = r.secretballot_token
+
+        assert token == 'fdb9f3e35ac8355e1e97f338f0ede097'
 
 
 class TestVoting(TestCase):

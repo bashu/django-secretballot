@@ -76,7 +76,7 @@ def enable_voting_on(cls, manager_name='objects',
                                            'be installed. (see secretballot/middleware.py)')
             return self.from_token(request.secretballot_token)
 
-    if django.VERSION < (1,10):
+    if django.VERSION < (1, 10):
         cls.add_to_class('_default_manager', VotableManager())
         cls.add_to_class(manager_name, VotableManager())
     else:
