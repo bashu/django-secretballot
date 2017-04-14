@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 from hashlib import md5
 
-# for support Django 1.10+
-from django.utils.deprecation import MiddlewareMixin
+from django import VERSION
+
+a, b = VERSION[:2]
+if a < 1 or a == 1 and b < 10:
+    Mixin = object
+else:
+    from django.utils.deprecation import MiddlewareMixin
+    Mixin = MiddlewareMixin
 
 
-class SecretBallotMiddleware(MiddlewareMixin):
+class SecretBallotMiddleware(Mixin):
     def process_request(self, request):
         request.secretballot_token = self.generate_token(request)
 
