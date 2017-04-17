@@ -4,7 +4,7 @@ from hashlib import md5
 from django import VERSION
 
 a, b = VERSION[:2]
-if a < 1 or a == 1 and b < 10:
+if (a < 1) or (a == 1 and b < 10):
     Mixin = object
 else:
     from django.utils.deprecation import MiddlewareMixin
