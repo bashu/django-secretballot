@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 import json
+import django
 from django.test import TestCase, Client
 from django.http import HttpRequest, Http404, HttpResponseForbidden
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.contenttypes.models import ContentType
 
+from .models import Link, WeirdLink
 from secretballot.middleware import (SecretBallotMiddleware,
                                      SecretBallotIpMiddleware,
                                      SecretBallotIpUseragentMiddleware)
-from .models import Link, WeirdLink
 from secretballot import views
 
 
@@ -245,3 +246,21 @@ class TestVoteView(TestCase):
         resp = views.vote(r, Link, l.id, 1)
         self.assertEqual(resp.status_code, 200)
         assert json.loads(resp.content.decode('utf8'))['num_votes'] == 1
+
+
+class AddSecretBallotManagerTestCase(TestCase):
+    """
+    secret_ballot manager should be added to model specified
+    in enable_voting_on(). Use `objects` as default for the
+    manager's name.
+    """
+
+    def test_object_manager_is_added_to_class(self):
+        if django.VERSION < (1, 10):
+            self.assertTrue(
+                any(manager[1].__class__.__name__ == "VotableManager" for manager in Link._meta.managers)
+            )
+        else:
+            self.assertTrue(
+                any(manager.__class__.__name__ == "VotableManager" for manager in Link._meta.managers)
+            )

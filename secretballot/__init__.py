@@ -83,9 +83,10 @@ def enable_voting_on(cls, manager_name='objects',
         # this is a hack but by setting a distinct name and appending
         # to local_managers the manager seems to be selected as the default
         vm = VotableManager()
-        vm.name = manager_name + 'votable'
-        cls._meta.local_managers.append(vm)
-        cls._meta.default_manager_name = manager_name + 'votable'
+        name = manager_name + 'votable'
+        # vm.contribute_to_class(cls, name)
+        cls.add_to_class(name, vm)
+        cls._meta.default_manager_name = name
         cls.add_to_class(manager_name, vm)
     cls.add_to_class(votes_name, GenericRelation(Vote))
     cls.add_to_class(total_name, property(get_total))
