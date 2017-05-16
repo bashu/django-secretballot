@@ -6,7 +6,7 @@ from django.http import HttpRequest, Http404, HttpResponseForbidden
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.contenttypes.models import ContentType
 
-from .models import Link, WeirdLink
+from .models import AnotherLink, Link, WeirdLink
 from secretballot.middleware import (SecretBallotMiddleware,
                                      SecretBallotIpMiddleware,
                                      SecretBallotIpUseragentMiddleware)
@@ -266,4 +266,6 @@ class AddSecretBallotManagerTestCase(TestCase):
             )
 
     def test_object_manager_with_custom_name(self):
-        pass
+        self.assertTrue(
+            hasattr(AnotherLink, 'ballot_custom_manager')
+        )
