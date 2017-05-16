@@ -264,3 +264,6 @@ class AddSecretBallotManagerTestCase(TestCase):
             self.assertTrue(
                 any(manager.__class__.__name__ == "VotableManager" for manager in Link._meta.managers)
             )
+
+    def test_object_manager_with_custom_name(self):
+        pass
