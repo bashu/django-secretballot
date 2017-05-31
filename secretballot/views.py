@@ -9,7 +9,7 @@ from secretballot.models import Vote
 
 def vote(request, content_type, object_id, vote, can_vote_test=None,
          redirect_url=None, template_name=None, template_loader=loader,
-         extra_context=None, context_processors=None, mimetype=None):
+         extra_context=None, context_processors=None):
 
     # get the token from a SecretBallotMiddleware
     if not hasattr(request, 'secretballot_token'):
@@ -72,4 +72,4 @@ def vote(request, content_type, object_id, vote, can_vote_test=None,
         votes = Vote.objects.filter(content_type=content_type, object_id=object_id).count()
         body = '{"num_votes":%d}' % votes
 
-    return HttpResponse(body, content_type=mimetype)
+    return HttpResponse(body, content_type=content_type)
