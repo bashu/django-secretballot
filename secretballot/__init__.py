@@ -87,7 +87,6 @@ def enable_voting_on(cls, manager_name='objects',
             manager for manager in cls._meta.local_managers if not manager.name == manager_name
         )
         cls.add_to_class(manager_name, vm)
-        cls._meta.default_manager_name = manager_name
     cls.add_to_class(votes_name, GenericRelation(Vote))
     cls.add_to_class(total_name, property(get_total))
     cls.add_to_class(add_vote_name, add_vote)

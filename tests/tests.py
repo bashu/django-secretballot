@@ -159,6 +159,19 @@ class TestVotingWithRenamedFields(TestCase):
         assert l.vs.all()
         assert l._secretballot_enabled is True
 
+    def test_manager_with_custom_name(self):
+        # If you provide a custom manager_name, then the vote fields
+        # are available through that manager
+        l = AnotherLink.objects.create(url='https://google.com')
+        l.add_vote('1.2.3.4', 1)
+        l.add_vote('1.2.3.5', -1)
+        l = AnotherLink.ballot_custom_manager.get()
+        assert l.vote_total == 0
+        assert l.total_upvotes == 1
+        assert l.total_downvotes == 1
+        assert l.votes.all()
+        assert l._secretballot_enabled is True
+
 
 class TestVoteView(TestCase):
 
@@ -182,11 +195,21 @@ class TestVoteView(TestCase):
         views.vote(r, Link, l.id, 1)
         assert Link.objects.get().vote_total == 1
 
+        # Test with custom manager name
+        other_link = AnotherLink.objects.create(url='http://google.com')
+        views.vote(r, AnotherLink, other_link.id, 1)
+        assert AnotherLink.ballot_custom_manager.get().vote_total == 1
+
     def test_string_content_type(self):
         r = self._req()
         l = Link.objects.create(url='http://google.com')
         views.vote(r, 'tests.Link', l.id, 1)
         assert Link.objects.get().vote_total == 1
+
+        # Test with custom manager name
+        other_link = AnotherLink.objects.create(url='http://google.com')
+        views.vote(r, 'tests.AnotherLink', other_link.id, 1)
+        assert AnotherLink.ballot_custom_manager.get().vote_total == 1
 
     def test_content_type_content_type(self):
         r = self._req()
@@ -217,12 +240,24 @@ class TestVoteView(TestCase):
         views.vote(r, Link, l.id, -1)       # update
         assert Link.objects.get().vote_total == -1
 
+        # Test with custom manager
+        other_link = AnotherLink.objects.create(url='http://google.com')
+        views.vote(r, AnotherLink, other_link.id, 1)
+        views.vote(r, AnotherLink, other_link.id, -1)  # update
+        assert AnotherLink.ballot_custom_manager.get().vote_total == -1
+
     def test_vote_delete(self):
         r = self._req()
         l = Link.objects.create(url='http://google.com')
         views.vote(r, Link, l.id, 1)
         views.vote(r, Link, l.id, 0)       # delete
         assert Link.objects.get().vote_total == 0
+
+        # Test with custom manager
+        other_link = AnotherLink.objects.create(url='http://google.com')
+        views.vote(r, AnotherLink, other_link.id, 1)
+        views.vote(r, AnotherLink, other_link.id, 0)  # update
+        assert AnotherLink.ballot_custom_manager.get().vote_total == 0
 
     def test_vote_redirect(self):
         r = self._req()
