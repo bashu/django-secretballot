@@ -41,18 +41,14 @@ Enabling voting for models
 
 In order to attach the voting helpers to a particular model it is enough to call ``secretballot.enable_voting_on`` passing the model class.
 
-For example::
+It is recommended you call enable_voting on within apps.py::
 
-    from django.db import models
-    import secretballot
+    class StoryAppConfig(AppConfig):
+
+        def ready(self):
+            story_model = apps.get_model("story_app", "Story")
+            secretballot.enable_voting_on(story_model)
     
-    class Story(models.Model):
-        title = models.CharField(max_length=100)
-        description = models.CharField(max_length=200)
-        timestamp = models.DateTimeField()
-        ...
-    
-    secretballot.enable_voting_on(Story)
 
 Using voting-enabled models
 ---------------------------
