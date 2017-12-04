@@ -1,3 +1,7 @@
+2.0.0
+==============
+    - drop compatibility code for Django 1.10 and below
+
 1.0.0 - 4 December 2017
 =======================
     - final release that supports Django 1.8 and up

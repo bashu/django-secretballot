@@ -1,17 +1,11 @@
 language: python
 python:
-    - "2.7"
     - "3.6"
 env:
-    - DJANGO_PACKAGE="Django==1.8"
-    - DJANGO_PACKAGE="Django==1.11"
     - DJANGO_PACKAGE="Django==2.0"
 install: pip install $DJANGO_PACKAGE
 script: PYTHONPATH=. DJANGO_SETTINGS_MODULE=tests.test_settings django-admin test
 matrix:
-  exclude:
-    - python: "2.7"
-      env: DJANGO_PACKAGE="Django==2.0"
 notifications:
     email:
         - dev@jamesturk.net
