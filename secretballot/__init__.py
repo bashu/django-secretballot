@@ -1,5 +1,5 @@
-__author__ = "James Turk (james.p.turk@gmail.com)"
-__version__ = "0.7.1"
+__author__ = "James Turk (dev@jamesturk.net)"
+__version__ = "1.0.0"
 __license__ = "BSD"
 
 import django

@@ -1,3 +1,7 @@
+1.0.0 - 4 December 2017
+=======================
+    - final release that supports Django 1.8 and up
+
 0.7.1 - 2 October 2017
 ======================
     - improved support for Django 2.0

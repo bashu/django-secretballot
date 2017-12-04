@@ -13,14 +13,15 @@ Django voting application that allows voting without a logged in user.
 
 Provides abstract base model for types that the user wishes to allow voting on as well as related utilities including generic views to ease the addition of 'anonymous' voting to a Django project.
 
-Written by James Turk <james.p.turk@gmail.com>
+Written by James Turk <dev@jamesturk.net>
 
 Source: http://github.com/jamesturk/django-secretballot/
 
 Requirements
 ============
 
-django >= 1.11
+Python >= 2.7
+django >= 1.8
 
 Usage
 =====
