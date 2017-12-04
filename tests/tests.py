@@ -291,14 +291,9 @@ class AddSecretBallotManagerTestCase(TestCase):
     """
 
     def test_object_manager_is_added_to_class(self):
-        if django.VERSION < (1, 10):
-            self.assertTrue(
-                any(manager[1].__class__.__name__ == "VotableManager" for manager in Link._meta.managers)
-            )
-        else:
-            self.assertTrue(
-                any(manager.__class__.__name__ == "VotableManager" for manager in Link._meta.managers)
-            )
+        self.assertTrue(
+            any(manager.__class__.__name__ == "VotableManager" for manager in Link._meta.managers)
+        )
 
     def test_object_manager_with_custom_name(self):
         self.assertTrue(

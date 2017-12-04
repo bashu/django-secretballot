@@ -20,8 +20,8 @@ Source: http://github.com/jamesturk/django-secretballot/
 Requirements
 ============
 
-Python >= 2.7
-django >= 1.8
+* django-secretballot 2.0 (WIP) requires django >= 1.11
+* django-secretballot 1.0 supports django >= 1.8 and Python >= 2.7
 
 Usage
 =====
