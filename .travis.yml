@@ -3,6 +3,7 @@ python:
     - "2.7"
     - "3.6"
 env:
+    - DJANGO_PACKAGE="Django==1.8"
     - DJANGO_PACKAGE="Django==1.11"
     - DJANGO_PACKAGE="Django==2.0"
 install: pip install $DJANGO_PACKAGE
