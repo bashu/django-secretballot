@@ -7,6 +7,10 @@ env:
     - DJANGO_PACKAGE="Django==2.0"
 install: pip install $DJANGO_PACKAGE
 script: PYTHONPATH=. DJANGO_SETTINGS_MODULE=tests.test_settings django-admin test
+matrix:
+  exclude:
+    - python: "2.7"
+      env: DJANGO_PACKAGE="Django==2.0"
 notifications:
     email:
-        - james.p.turk@gmail.com
+        - dev@jamesturk.net
