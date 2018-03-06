@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 import secretballot
+
 
 class Link(models.Model):
     url = models.URLField()
@@ -10,7 +12,12 @@ secretballot.enable_voting_on(Link)
 # used for testing field renames
 class WeirdLink(models.Model):
     url = models.URLField()
+    title = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.title
+
+    
 secretballot.enable_voting_on(WeirdLink,
                               votes_name='vs',
                               upvotes_name='total_upvs',

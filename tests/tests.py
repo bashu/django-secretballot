@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 from django.test import TestCase, Client
 from django.http import HttpRequest, Http404, HttpResponseForbidden
@@ -146,6 +147,15 @@ class TestVotingWithRenamedFields(TestCase):
         assert l.total_downvs == 1
         assert l.vs.all()
         assert l._secretballot_enabled is True
+
+    def test_str_method_works_with_non_ascii(self):
+        l = WeirdLink.objects.create(url='https//other.url', title="Orangé España")
+        l.add_v('1.2.3.4', 1)
+        l = WeirdLink.objects.get(id=l.id)
+        assert l.v_total == 1
+        vote = l.vs.first()
+        vote_str_out = vote.__str__()
+        assert vote_str_out == "+1 from 1.2.3.4 on Orangé España"
 
 
 class TestVoteView(TestCase):
