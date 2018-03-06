@@ -159,6 +159,15 @@ class TestVotingWithRenamedFields(TestCase):
         assert l.vs.all()
         assert l._secretballot_enabled is True
 
+    def test_str_method_works_with_non_ascii(self):
+        l = WeirdLink.objects.create(url='https//other.url', title="Orangé España")
+        l.add_v('1.2.3.4', 1)
+        l = WeirdLink.objects.get(id=l.id)
+        assert l.v_total == 1
+        vote = l.vs.first()
+        vote_str_out = vote.__str__()
+        assert vote_str_out == "+1 from 1.2.3.4 on Orangé España"
+        
     def test_manager_with_custom_name(self):
         # If you provide a custom manager_name, then the vote fields
         # are available through that manager
