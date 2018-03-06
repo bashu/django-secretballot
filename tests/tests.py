@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 import json
+import django
 from django.test import TestCase, Client
 from django.http import HttpRequest, Http404, HttpResponseForbidden
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.contenttypes.models import ContentType
 
+from .models import AnotherLink, Link, WeirdLink
 from secretballot.middleware import (SecretBallotMiddleware,
                                      SecretBallotIpMiddleware,
                                      SecretBallotIpUseragentMiddleware)
-from .models import Link, WeirdLink
 from secretballot import views
 
 
@@ -61,6 +62,16 @@ class MiddlewareTestCase(TestCase):
         mw = SecretBallotMiddleware()
         with self.assertRaises(NotImplementedError):
             mw.process_request(HttpRequest())
+
+    def test_unicode_token(self):
+        mw = SecretBallotIpUseragentMiddleware()
+        r = HttpRequest()
+        r.META['REMOTE_ADDR'] = '1.2.3.4'
+        r.META['HTTP_USER_AGENT'] = u"Orange España"
+        mw.process_request(r)
+        token = r.secretballot_token
+
+        assert token == 'fdb9f3e35ac8355e1e97f338f0ede097'
 
 
 class TestVoting(TestCase):
@@ -156,6 +167,19 @@ class TestVotingWithRenamedFields(TestCase):
         vote = l.vs.first()
         vote_str_out = vote.__str__()
         assert vote_str_out == "+1 from 1.2.3.4 on Orangé España"
+        
+    def test_manager_with_custom_name(self):
+        # If you provide a custom manager_name, then the vote fields
+        # are available through that manager
+        l = AnotherLink.objects.create(url='https://google.com')
+        l.add_vote('1.2.3.4', 1)
+        l.add_vote('1.2.3.5', -1)
+        l = AnotherLink.ballot_custom_manager.get()
+        assert l.vote_total == 0
+        assert l.total_upvotes == 1
+        assert l.total_downvotes == 1
+        assert l.votes.all()
+        assert l._secretballot_enabled is True
 
 
 class TestVoteView(TestCase):
@@ -180,11 +204,21 @@ class TestVoteView(TestCase):
         views.vote(r, Link, l.id, 1)
         assert Link.objects.get().vote_total == 1
 
+        # Test with custom manager name
+        other_link = AnotherLink.objects.create(url='http://google.com')
+        views.vote(r, AnotherLink, other_link.id, 1)
+        assert AnotherLink.ballot_custom_manager.get().vote_total == 1
+
     def test_string_content_type(self):
         r = self._req()
         l = Link.objects.create(url='http://google.com')
         views.vote(r, 'tests.Link', l.id, 1)
         assert Link.objects.get().vote_total == 1
+
+        # Test with custom manager name
+        other_link = AnotherLink.objects.create(url='http://google.com')
+        views.vote(r, 'tests.AnotherLink', other_link.id, 1)
+        assert AnotherLink.ballot_custom_manager.get().vote_total == 1
 
     def test_content_type_content_type(self):
         r = self._req()
@@ -215,12 +249,24 @@ class TestVoteView(TestCase):
         views.vote(r, Link, l.id, -1)       # update
         assert Link.objects.get().vote_total == -1
 
+        # Test with custom manager
+        other_link = AnotherLink.objects.create(url='http://google.com')
+        views.vote(r, AnotherLink, other_link.id, 1)
+        views.vote(r, AnotherLink, other_link.id, -1)  # update
+        assert AnotherLink.ballot_custom_manager.get().vote_total == -1
+
     def test_vote_delete(self):
         r = self._req()
         l = Link.objects.create(url='http://google.com')
         views.vote(r, Link, l.id, 1)
         views.vote(r, Link, l.id, 0)       # delete
         assert Link.objects.get().vote_total == 0
+
+        # Test with custom manager
+        other_link = AnotherLink.objects.create(url='http://google.com')
+        views.vote(r, AnotherLink, other_link.id, 1)
+        views.vote(r, AnotherLink, other_link.id, 0)  # update
+        assert AnotherLink.ballot_custom_manager.get().vote_total == 0
 
     def test_vote_redirect(self):
         r = self._req()
@@ -244,3 +290,21 @@ class TestVoteView(TestCase):
         resp = views.vote(r, Link, l.id, 1)
         self.assertEqual(resp.status_code, 200)
         assert json.loads(resp.content.decode('utf8'))['num_votes'] == 1
+
+
+class AddSecretBallotManagerTestCase(TestCase):
+    """
+    secret_ballot manager should be added to model specified
+    in enable_voting_on(). Use `objects` as default for the
+    manager's name.
+    """
+
+    def test_object_manager_is_added_to_class(self):
+        self.assertTrue(
+            any(manager.__class__.__name__ == "VotableManager" for manager in Link._meta.managers)
+        )
+
+    def test_object_manager_with_custom_name(self):
+        self.assertTrue(
+            hasattr(AnotherLink, 'ballot_custom_manager')
+        )

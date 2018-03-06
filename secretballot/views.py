@@ -1,4 +1,4 @@
-from django.template import loader, RequestContext
+from django.template import loader
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.db.models.base import ModelBase

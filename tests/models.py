@@ -26,4 +26,13 @@ secretballot.enable_voting_on(WeirdLink,
                               add_vote_name='add_v',
                               remove_vote_name='remove_v',
                               )
-# TODO?: manager name & base_manager?
+# TODO?: base_manager?
+
+
+# Used for testing custom manager_name
+class AnotherLink(models.Model):
+    url = models.URLField()
+
+secretballot.enable_voting_on(AnotherLink,
+                              manager_name='ballot_custom_manager'
+                              )

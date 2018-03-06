@@ -1,5 +1,5 @@
-__author__ = "James Turk (james.p.turk@gmail.com)"
-__version__ = "0.6.0"
+__author__ = "James Turk (dev@jamesturk.net)"
+__version__ = "2.0.0-dev1"
 __license__ = "BSD"
 
 import django
@@ -76,17 +76,13 @@ def enable_voting_on(cls, manager_name='objects',
                                            'be installed. (see secretballot/middleware.py)')
             return self.from_token(request.secretballot_token)
 
-    if django.VERSION < (1,10):
-        cls.add_to_class('_default_manager', VotableManager())
-        cls.add_to_class(manager_name, VotableManager())
-    else:
-        # this is a hack but by setting a distinct name and appending
-        # to local_managers the manager seems to be selected as the default
-        vm = VotableManager()
-        vm.name = manager_name + 'votable'
-        cls._meta.local_managers.append(vm)
-        cls._meta.default_manager_name = manager_name + 'votable'
-        cls.add_to_class(manager_name, vm)
+    # If 'objects' is the manager_name, then remove if from managers_map
+    # and lets VotableManager have the name 'objects'.
+    vm = VotableManager()
+    cls._meta.local_managers[:] = (
+        manager for manager in cls._meta.local_managers if not manager.name == manager_name
+    )
+    cls.add_to_class(manager_name, vm)
     cls.add_to_class(votes_name, GenericRelation(Vote))
     cls.add_to_class(total_name, property(get_total))
     cls.add_to_class(add_vote_name, add_vote)
