@@ -15,12 +15,12 @@ Provides abstract base model for types that the user wishes to allow voting on a
 
 Written by James Turk <dev@jamesturk.net>
 
-Source: http://github.com/jamesturk/django-secretballot/
+Source: https://github.com/jamesturk/django-secretballot/
 
 Requirements
 ============
 
-* django-secretballot 2.0 (WIP) requires django >= 1.11
+* django-secretballot 2.0 requires django >= 2.0 and Python >= 3.5
 * django-secretballot 1.0 supports django >= 1.8 and Python >= 2.7
 
 Usage

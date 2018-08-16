@@ -200,29 +200,29 @@ class TestVoteView(TestCase):
 
     def test_model_content_type(self):
         r = self._req()
-        l = Link.objects.create(url='http://google.com')
+        l = Link.objects.create(url='https://google.com')
         views.vote(r, Link, l.id, 1)
         assert Link.objects.get().vote_total == 1
 
         # Test with custom manager name
-        other_link = AnotherLink.objects.create(url='http://google.com')
+        other_link = AnotherLink.objects.create(url='https://google.com')
         views.vote(r, AnotherLink, other_link.id, 1)
         assert AnotherLink.ballot_custom_manager.get().vote_total == 1
 
     def test_string_content_type(self):
         r = self._req()
-        l = Link.objects.create(url='http://google.com')
+        l = Link.objects.create(url='https://google.com')
         views.vote(r, 'tests.Link', l.id, 1)
         assert Link.objects.get().vote_total == 1
 
         # Test with custom manager name
-        other_link = AnotherLink.objects.create(url='http://google.com')
+        other_link = AnotherLink.objects.create(url='https://google.com')
         views.vote(r, 'tests.AnotherLink', other_link.id, 1)
         assert AnotherLink.ballot_custom_manager.get().vote_total == 1
 
     def test_content_type_content_type(self):
         r = self._req()
-        l = Link.objects.create(url='http://google.com')
+        l = Link.objects.create(url='https://google.com')
         ctype = ContentType.objects.get(model='link')
         views.vote(r, ctype, l.id, 1)
         assert Link.objects.get().vote_total == 1
@@ -233,7 +233,7 @@ class TestVoteView(TestCase):
 
     def test_can_vote_test(self):
         r = self._req()
-        l = Link.objects.create(url='http://google.com')
+        l = Link.objects.create(url='https://google.com')
         def can_vote_test(request, content_type, object_id, vote):
             return True
         views.vote(r, Link, 1, 1, can_vote_test=can_vote_test)
@@ -244,40 +244,40 @@ class TestVoteView(TestCase):
 
     def test_vote_update(self):
         r = self._req()
-        l = Link.objects.create(url='http://google.com')
+        l = Link.objects.create(url='https://google.com')
         views.vote(r, Link, l.id, 1)
         views.vote(r, Link, l.id, -1)       # update
         assert Link.objects.get().vote_total == -1
 
         # Test with custom manager
-        other_link = AnotherLink.objects.create(url='http://google.com')
+        other_link = AnotherLink.objects.create(url='https://google.com')
         views.vote(r, AnotherLink, other_link.id, 1)
         views.vote(r, AnotherLink, other_link.id, -1)  # update
         assert AnotherLink.ballot_custom_manager.get().vote_total == -1
 
     def test_vote_delete(self):
         r = self._req()
-        l = Link.objects.create(url='http://google.com')
+        l = Link.objects.create(url='https://google.com')
         views.vote(r, Link, l.id, 1)
         views.vote(r, Link, l.id, 0)       # delete
         assert Link.objects.get().vote_total == 0
 
         # Test with custom manager
-        other_link = AnotherLink.objects.create(url='http://google.com')
+        other_link = AnotherLink.objects.create(url='https://google.com')
         views.vote(r, AnotherLink, other_link.id, 1)
         views.vote(r, AnotherLink, other_link.id, 0)  # update
         assert AnotherLink.ballot_custom_manager.get().vote_total == 0
 
     def test_vote_redirect(self):
         r = self._req()
-        l = Link.objects.create(url='http://google.com')
+        l = Link.objects.create(url='https://google.com')
         resp = views.vote(r, Link, l.id, 1, redirect_url='/thanks/')
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(resp.url, '/thanks/')
 
     def test_vote_template(self):
         r = self._req()
-        l = Link.objects.create(url='http://google.com')
+        l = Link.objects.create(url='https://google.com')
         resp = views.vote(r, Link, l.id, 1, template_name='vote.html')
         self.assertEqual(resp.status_code, 200)
         self.assertIn(b'voted', resp.content)
@@ -286,7 +286,7 @@ class TestVoteView(TestCase):
 
     def test_vote_default_json(self):
         r = self._req()
-        l = Link.objects.create(url='http://google.com')
+        l = Link.objects.create(url='https://google.com')
         resp = views.vote(r, Link, l.id, 1)
         self.assertEqual(resp.status_code, 200)
         assert json.loads(resp.content.decode('utf8'))['num_votes'] == 1

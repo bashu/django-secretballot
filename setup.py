@@ -4,14 +4,14 @@ long_description = open('README.rst').read()
 
 setup(
     name='django-secretballot',
-    version="2.0.0-dev1",
+    version="2.0.0-dev2",
     packages=find_packages(),
     include_package_data=True,
     description='Django anonymous voting application',
     author='James Turk',
-    author_email='james.p.turk@gmail.com',
+    author_email='dev@jamesturk.net',
     license='BSD License',
-    url='http://github.com/jamesturk/django-secretballot/',
+    url='https://github.com/jamesturk/django-secretballot/',
     long_description=long_description,
     platforms=["any"],
     install_requires=[
@@ -25,11 +25,10 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Environment :: Web Environment',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 )
