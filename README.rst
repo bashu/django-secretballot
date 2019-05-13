@@ -118,7 +118,7 @@ secretballot uses a simple piece of middleware to do this task, and makes it tri
 
 SecretBallotMiddleware is an abstract class that defines a generate_token(request) method that should return a string to be used for the token.  
 
-For convinience several middleware have already been defined:
+For convenience several middleware have already been defined:
 
 SecretBallotIpMiddleware:
     simply sets the token to request.META['REMOTE_ADDR'] -- the user's IP address
