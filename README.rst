@@ -2,8 +2,8 @@
 django-secretballot
 ===================
 
-.. image:: https://travis-ci.org/jamesturk/django-secretballot.svg?branch=master
-    :target: https://travis-ci.org/jamesturk/django-secretballot
+.. image:: https://travis-ci.com/jamesturk/django-secretballot.svg?branch=master
+    :target: https://travis-ci.com/jamesturk/django-secretballot
 
 .. image:: https://img.shields.io/pypi/v/django-secretballot.svg
     :target: https://pypi.python.org/pypi/django-secretballot
