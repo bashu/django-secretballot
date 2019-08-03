@@ -16,6 +16,15 @@ class SecretBallotIpMiddleware(SecretBallotMiddleware):
         return request.META['REMOTE_ADDR']
 
 
+class SecretBallotUserIdMiddleware(SecretBallotMiddleware):
+    """
+    As the token is generated based on the user ID, this middleware
+    should only be used on pages where the user is logged in.
+    """
+    def genereate_token(self, request):
+        return request.user.id
+
+
 class SecretBallotIpUseragentMiddleware(SecretBallotMiddleware):
     def generate_token(self, request):
         s = u"".join((request.META['REMOTE_ADDR'], request.META.get('HTTP_USER_AGENT', '')))
