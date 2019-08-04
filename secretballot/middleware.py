@@ -21,7 +21,7 @@ class SecretBallotUserIdMiddleware(SecretBallotMiddleware):
     As the token is generated based on the user ID, this middleware
     should only be used on pages where the user is logged in.
     """
-    def genereate_token(self, request):
+    def generate_token(self, request):
         return request.user.id
 
 
