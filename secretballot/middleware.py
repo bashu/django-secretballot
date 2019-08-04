@@ -22,7 +22,7 @@ class SecretBallotUserIdMiddleware(SecretBallotMiddleware):
     should only be used on pages where the user is logged in.
     """
     def generate_token(self, request):
-        return request.user.id
+        return str(request.user.id)
 
 
 class SecretBallotIpUseragentMiddleware(SecretBallotMiddleware):
