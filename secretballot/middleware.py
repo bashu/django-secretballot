@@ -18,6 +18,9 @@ class SecretBallotIpMiddleware(SecretBallotMiddleware):
 
 class SecretBallotUserIdMiddleware(SecretBallotMiddleware):
     """
+    This Middleware is useful if you want to implement anonymous voting,
+    but only for logged in users.
+
     As the token is generated based on the user ID, this middleware
     should only be used on pages where the user is logged in.
     """
