@@ -2,7 +2,6 @@ __author__ = "James Turk (dev@jamesturk.net)"
 __version__ = "2.0.0-dev1"
 __license__ = "BSD"
 
-import django
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Manager
 
