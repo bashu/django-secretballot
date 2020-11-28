@@ -240,7 +240,7 @@ class TestVoteView(TestCase):
         def never(request, content_type, object_id, vote):
             return False
         forbidden = views.vote(r, Link, 1, 1, can_vote_test=never)
-        self.assertEquals(forbidden.status_code, 403)
+        self.assertEqual(forbidden.status_code, 403)
 
     def test_vote_update(self):
         r = self._req()
