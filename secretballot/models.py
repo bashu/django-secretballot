@@ -8,7 +8,7 @@ VOTE_CHOICES = (
 )
 
 
-class Vote(models.Model):
+class VoteBase(models.Model):
     token = models.CharField(max_length=50)
     vote = models.SmallIntegerField(choices=VOTE_CHOICES)
 
@@ -20,7 +20,15 @@ class Vote(models.Model):
     updated_at = models.DateTimeField(auto_now=True, db_index=True, null=True)
 
     class Meta:
+        abstract = True
         unique_together = (('token', 'content_type', 'object_id'),)
 
     def __str__(self):
         return '{} from {} on {}'.format(self.get_vote_display(), self.token, self.content_object)
+
+
+class Vote(VoteBase):
+
+    class Meta(VoteBase.Meta):
+        db_table = "secretballot_vote"
+

@@ -5,7 +5,9 @@ __license__ = "BSD"
 default_app_config = "%s.apps.AppConfig" % __name__
 
 def limit_total_votes(num):
-    from secretballot.models import Vote
+    from secretballot.utils import get_vote_model
+
+    Vote = get_vote_model()
 
     def total_vote_limiter(request, content_type, object_id, vote):
         return Vote.objects.filter(content_type=content_type,
@@ -20,9 +22,11 @@ def enable_voting_on(cls, manager_name='objects',
                      base_manager=None):
     from django.contrib.contenttypes.models import ContentType
     from django.contrib.contenttypes.fields import GenericRelation
-    from secretballot.models import Vote
     from django.core.exceptions import ImproperlyConfigured
     from django.db.models import Manager
+    from secretballot.utils import get_vote_model
+
+    Vote = get_vote_model()
     VOTE_TABLE = Vote._meta.db_table
 
     def add_vote(self, token, vote):

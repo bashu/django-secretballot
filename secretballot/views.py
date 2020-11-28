@@ -3,7 +3,9 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.db.models.base import ModelBase
 from django.contrib.contenttypes.models import ContentType
-from secretballot.models import Vote
+from secretballot.utils import get_vote_model
+
+Vote = get_vote_model()
 
 
 def vote(request, content_type, object_id, vote, can_vote_test=None,
