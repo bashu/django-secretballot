@@ -2,9 +2,7 @@ __author__ = "James Turk (dev@jamesturk.net)"
 __version__ = "2.0.0-dev1"
 __license__ = "BSD"
 
-from django.core.exceptions import ImproperlyConfigured
-from django.db.models import Manager
-
+default_app_config = "%s.apps.AppConfig" % __name__
 
 def limit_total_votes(num):
     from secretballot.models import Vote
@@ -23,6 +21,8 @@ def enable_voting_on(cls, manager_name='objects',
     from django.contrib.contenttypes.models import ContentType
     from django.contrib.contenttypes.fields import GenericRelation
     from secretballot.models import Vote
+    from django.core.exceptions import ImproperlyConfigured
+    from django.db.models import Manager
     VOTE_TABLE = Vote._meta.db_table
 
     def add_vote(self, token, vote):
