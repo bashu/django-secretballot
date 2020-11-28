@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 from hashlib import md5
-from django.utils.deprecation import MiddlewareMixin
 
 
-class SecretBallotMiddleware(MiddlewareMixin):
-    def process_request(self, request):
+class SecretBallotMiddleware:
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
         request.secretballot_token = self.generate_token(request)
+
+        return self.get_response(request)
 
     def generate_token(self, request):
         raise NotImplementedError
