@@ -1,0 +1,13 @@
+[run]
+omit = */migrations/*,*__init__*
+source = secretballot
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    # -*- coding: utf-8 -*-
+    pass

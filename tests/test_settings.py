@@ -1,28 +1,47 @@
+# -*- coding: utf-8 -*-
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-SECRET_KEY = 'tests'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:',
-    }
-}
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'secretballot',
-    'tests',
-)
+SECRET_KEY = "DUMMY_SECRET_KEY"
 
+INTERNAL_IPS = []
 
-TEMPLATES = [
-{
-    'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    'APP_DIRS': True,
-    'DIRS': [os.path.dirname(__file__)],
-},
+# Application definition
+
+PROJECT_APPS = ["tests", "secretballot"]
+
+INSTALLED_APPS = [
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+] + PROJECT_APPS
+
+MIDDLEWARE = [
 ]
 
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(BASE_DIR, "tests", "test_templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.request",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
 
-MIDDLEWARE_CLASSES = ()
+# Database
+# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
