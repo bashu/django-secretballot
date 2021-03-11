@@ -21,3 +21,7 @@ class WeirdLink(models.Model):
 # Used for testing custom manager_name
 class AnotherLink(models.Model):
     url = models.URLField()
+
+# Used for testing custom manager_name
+class NonAutomaticEnabledModel(models.Model):
+    url = models.URLField()
