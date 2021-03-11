@@ -5,12 +5,13 @@ from django.test import TestCase, Client
 from django.http import HttpRequest, HttpResponse, Http404, HttpResponseForbidden
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.contenttypes.models import ContentType
+from unittest.mock import patch
 
-from .models import AnotherLink, Link, WeirdLink
+from .models import AnotherLink, NonAutomaticEnabledModel, Link, WeirdLink
 from secretballot.middleware import (SecretBallotMiddleware,
                                      SecretBallotIpMiddleware,
                                      SecretBallotIpUseragentMiddleware)
-from secretballot import views
+from secretballot import enable_voting_on, views
 
 def get_response_empty(request):
     return HttpResponse()
@@ -313,3 +314,13 @@ class AddSecretBallotManagerTestCase(TestCase):
         self.assertTrue(
             hasattr(AnotherLink, 'ballot_custom_manager')
         )
+
+    def test_no_db_access_when_getting_queryset(self):
+        with patch("django.db.backends.utils.CursorWrapper") as db_mock:
+            db_mock.side_effect = RuntimeError("Tried to access database")
+
+            enable_voting_on(NonAutomaticEnabledModel)
+
+            NonAutomaticEnabledModel.objects.get_queryset()
+
+            db_mock.assert_not_called()
