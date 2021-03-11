@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import json
-import django
-from django.test import TestCase, Client
-from django.http import HttpRequest, HttpResponse, Http404, HttpResponseForbidden
+from django.test import TestCase
+from django.http import HttpRequest, HttpResponse, Http404
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Sum
 from unittest.mock import patch
 
 from .models import AnotherLink, NonAutomaticEnabledModel, Link, WeirdLink
@@ -149,6 +149,18 @@ class TestVoting(TestCase):
         assert sorted_links[0].user_vote == None     # bing
         assert sorted_links[1].user_vote == 1        # google
         assert sorted_links[2].user_vote == -1       # yahoo
+
+    def test_aggregates(self):
+        b = Link.objects.create(url='https://bing.com')
+        b.add_vote("1.1.1.1", 1)
+        g = Link.objects.create(url="https://google.com")
+        g.add_vote("1.1.1.1", 1)
+        g.add_vote("2.2.2.2", 1)
+        g.add_vote("3.3.3.3", -1)
+        g.add_vote("4.4.4.4", 1)
+
+        assert Link.objects.filter(url="https://google.com").aggregate(
+            total_votes=Sum("votes__vote"))["total_votes"] == 2
 
 
 class TestVotingWithRenamedFields(TestCase):
