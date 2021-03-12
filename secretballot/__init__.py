@@ -21,8 +21,9 @@ def enable_voting_on(cls, manager_name='objects',
                      add_vote_name='add_vote', remove_vote_name='remove_vote',
                      base_manager=None):
     from django.contrib.contenttypes.fields import GenericRelation
+    from django.contrib.contenttypes.models import ContentType
     from django.core.exceptions import ImproperlyConfigured
-    from django.db.models import Count, Manager, OuterRef, Q, Subquery
+    from django.db.models import Manager, OuterRef, Subquery
     from secretballot.utils import get_vote_model
 
     Vote = get_vote_model()
@@ -55,13 +56,18 @@ def enable_voting_on(cls, manager_name='objects',
         use_for_related_fields = True
 
         def get_queryset(self):
-            votes_vote_column = "{}__vote".format(votes_name)
-            downvote_query = Count(
-                votes_name, filter=Q(**{votes_vote_column: -1}))
-            upvote_query = Count(
-                votes_name, filter=Q(**{votes_vote_column: 1}))
-            return super(VotableManager, self).get_queryset().annotate(**{
-                upvotes_name: upvote_query, downvotes_name: downvote_query})
+            db_table = self.model._meta.db_table
+            pk_name = self.model._meta.pk.attname
+            opts = ContentType.objects._get_opts(
+                self.model, for_concrete_model=True)
+            content_type_id_query = "(SELECT id FROM {} WHERE app_label='{}' AND model='{}')".format(
+                ContentType._meta.db_table, opts.app_label, opts.model_name)
+            vote_query = '(SELECT COUNT(*) from {} WHERE vote={{}} AND object_id={}.{} AND content_type_id={})'.format(
+                Vote._meta.db_table, db_table, pk_name, content_type_id_query)
+            downvote_query = vote_query.format(-1)
+            upvote_query = vote_query.format(1)
+            return super(VotableManager, self).get_queryset().extra(
+                select={upvotes_name: upvote_query, downvotes_name: downvote_query})
 
         def from_token(self, token):
             pk_column = self.model._meta.pk.attname
