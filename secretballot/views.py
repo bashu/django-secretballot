@@ -1,33 +1,45 @@
-from django.template import loader
-from django.core.exceptions import ImproperlyConfigured
-from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
-from django.db.models.base import ModelBase
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ImproperlyConfigured
+from django.db.models.base import ModelBase
+from django.http import (Http404, HttpResponse, HttpResponseForbidden,
+                         HttpResponseRedirect)
+from django.template import loader
+
 from secretballot.utils import get_vote_model
 
 Vote = get_vote_model()
 
 
-def vote(request, content_type, object_id, vote, can_vote_test=None,
-         redirect_url=None, template_name=None, template_loader=loader,
-         extra_context=None, context_processors=None, mimetype=None):
+def vote(
+    request,
+    content_type,
+    object_id,
+    vote,
+    can_vote_test=None,
+    redirect_url=None,
+    template_name=None,
+    template_loader=loader,
+    extra_context=None,
+    context_processors=None,
+    mimetype=None,
+):
 
     # get the token from a SecretBallotMiddleware
-    if not hasattr(request, 'secretballot_token'):
-        raise ImproperlyConfigured('To use secretballot a SecretBallotMiddleware '
-                                   'must be installed. (see secretballot/middleware.py)')
+    if not hasattr(request, "secretballot_token"):
+        raise ImproperlyConfigured(
+            "To use secretballot a SecretBallotMiddleware " "must be installed. (see secretballot/middleware.py)"
+        )
     token = request.secretballot_token
 
     if isinstance(content_type, ContentType):
         pass
     elif isinstance(content_type, ModelBase):
         content_type = ContentType.objects.get_for_model(content_type)
-    elif isinstance(content_type, str) and '.' in content_type:
-        app, modelname = content_type.split('.')
+    elif isinstance(content_type, str) and "." in content_type:
+        app, modelname = content_type.split(".")
         content_type = ContentType.objects.get(app_label=app, model__iexact=modelname)
     else:
-        raise ValueError('content_type must be an instance of ContentType, a model, '
-                         'or "app.modelname" string')
+        raise ValueError("content_type must be an instance of ContentType, a model, " 'or "app.modelname" string')
 
     # do the action
     if vote:
@@ -40,8 +52,9 @@ def vote(request, content_type, object_id, vote, can_vote_test=None,
             if not can_vote_test(request, content_type, object_id, vote):
                 return HttpResponseForbidden("vote was forbidden")
 
-        vobj, new = Vote.objects.get_or_create(content_type=content_type, object_id=object_id,
-                                               token=token, defaults={'vote': vote})
+        vobj, new = Vote.objects.get_or_create(
+            content_type=content_type, object_id=object_id, token=token, defaults={"vote": vote}
+        )
         if not new:
             vobj.vote = vote
             vobj.save()
@@ -54,10 +67,8 @@ def vote(request, content_type, object_id, vote, can_vote_test=None,
     elif template_name:
         # get_object_for_this_type uses _base_manager, but we only set
         # _default_manager. Drop to lower level API.
-        content_obj = content_type.model_class()._default_manager.using(
-            content_type._state.db
-        ).get(pk=object_id)
-        c = {'content_obj': content_obj}
+        content_obj = content_type.model_class()._default_manager.using(content_type._state.db).get(pk=object_id)
+        c = {"content_obj": content_obj}
 
         # copy extra_context into context, calling any callables
         if extra_context:

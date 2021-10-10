@@ -18,8 +18,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
 ] + PROJECT_APPS
 
-MIDDLEWARE = [
-]
+MIDDLEWARE = []
 
 TEMPLATES = [
     {
