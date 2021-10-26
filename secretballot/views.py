@@ -27,7 +27,7 @@ def vote(
     # get the token from a SecretBallotMiddleware
     if not hasattr(request, "secretballot_token"):
         raise ImproperlyConfigured(
-            "To use secretballot a SecretBallotMiddleware " "must be installed. (see secretballot/middleware.py)"
+            "To use secretballot a SecretBallotMiddleware must be installed. (see secretballot/middleware.py)"
         )
     token = request.secretballot_token
 
@@ -39,7 +39,7 @@ def vote(
         app, modelname = content_type.split(".")
         content_type = ContentType.objects.get(app_label=app, model__iexact=modelname)
     else:
-        raise ValueError("content_type must be an instance of ContentType, a model, " 'or "app.modelname" string')
+        raise ValueError("content_type must be an instance of ContentType, a model, or \"app.modelname\" string")
 
     # do the action
     if vote:

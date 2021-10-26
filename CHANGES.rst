@@ -1,10 +1,11 @@
 Changes
 -------
 
-2.0.0 (unreleased)
+2.0.0 (2021-10-26)
 ------------------
 
 - drop compatibility code for Django 1.10 and below
+- make it possible to customize Vote model per project
 
 1.0.0 (2017-12-05)
 ------------------

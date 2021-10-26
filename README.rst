@@ -254,8 +254,10 @@ Depending on the parameters given the return value of this view varies:
 
   .. code-block:: python
 
+      from secretballot.utils import get_vote_model
+
       def only_three_votes(request, content_type, object_id, vote):
-          return Vote.objects.filter(content_type=content_type, token=request.secretballot_token).count() < 3
+          return get_vote_model().objects.filter(content_type=content_type, token=request.secretballot_token).count() < 3
 
   All ``can_vote_test`` methods must take the non-optional parameters to ``secretballot.views.vote`` and should return ``True`` if the vote should be allowed. If the vote is not allowed by default the view will return a 403, but it is also acceptable to raise a different exception.
 
