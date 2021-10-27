@@ -38,7 +38,7 @@ First of all, you must add this project to your list of ``INSTALLED_APPS`` in
 .. code-block:: python
   
     INSTALLED_APPS += [
-        "secretballot",
+        "secretballot",  # must be last in a list
     ]
 
 There is only one mandatory configuration option you need to set in your ``settings.py``:
