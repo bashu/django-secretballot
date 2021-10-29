@@ -35,5 +35,5 @@ class SecretBallotUserIdMiddleware(SecretBallotMiddleware):
 
 class SecretBallotIpUseragentMiddleware(SecretBallotMiddleware):
     def generate_token(self, request):
-        s = u"".join((request.META["REMOTE_ADDR"], request.META.get("HTTP_USER_AGENT", "")))
+        s = "".join((request.META["REMOTE_ADDR"], request.META.get("HTTP_USER_AGENT", "")))
         return md5(s.encode("utf-8")).hexdigest()
