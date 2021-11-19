@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import json
 from unittest.mock import patch
 
@@ -75,7 +74,7 @@ class MiddlewareTestCase(TestCase):
         mw = SecretBallotIpUseragentMiddleware(get_response_empty)
         r = HttpRequest()
         r.META["REMOTE_ADDR"] = "1.2.3.4"
-        r.META["HTTP_USER_AGENT"] = u"Orange España"
+        r.META["HTTP_USER_AGENT"] = "Orange España"
         mw(r)
         token = r.secretballot_token
 

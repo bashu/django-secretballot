@@ -70,15 +70,15 @@ def enable_voting_on(
             downvote_query = vote_query.format(-1)
             upvote_query = vote_query.format(1)
             return (
-                super(VotableManager, self)
+                super()
                 .get_queryset()
                 .extra(select={upvotes_name: upvote_query, downvotes_name: downvote_query})
             )
 
         def from_token(self, token):
             pk_column = self.model._meta.pk.attname
-            votes_vote_column = "{}__vote".format(votes_name)
-            votes_token_column = "{}__token".format(votes_name)
+            votes_vote_column = f"{votes_name}__vote"
+            votes_token_column = f"{votes_name}__token"
             return self.get_queryset().annotate(
                 user_vote=Subquery(
                     self.model.objects.filter(**{votes_token_column: token, pk_column: OuterRef(pk_column)}).values(
