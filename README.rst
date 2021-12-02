@@ -25,6 +25,12 @@ Documentation
 
 For more details, see the `documentation <http://django-secretballot.rtfd.org>`_ at Read The Docs.
 
+Contributing
+------------
+
+If you like this module, forked it, or would like to improve it, please let us know!
+Pull requests are welcome too. :-)
+
 Credits
 -------
 
