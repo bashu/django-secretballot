@@ -1,8 +1,8 @@
 Changes
 -------
 
-2.0.1 (WIP)
------------
+2.0.1 (2026-08-16)
+------------------
 
 - drop support for Python < 3.10 and Django < 5.2
 - add support for Django 6.0 and 6.1
