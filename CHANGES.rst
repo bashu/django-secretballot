@@ -1,6 +1,14 @@
 Changes
 -------
 
+2.0.1 (WIP)
+-----------
+
+- drop support for Python < 3.10 and Django < 5.2
+- add support for Django 6.0 and 6.1
+- switch packaging to pyproject.toml, drop setup.py/setup.cfg
+- switch CI to GitHub Actions, add pre-commit and dependabot config
+
 2.0.0 (2021-10-26)
 ------------------
 
