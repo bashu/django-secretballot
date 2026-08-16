@@ -1,8 +1,10 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models.base import ModelBase
-from django.http import (Http404, HttpResponse, HttpResponseForbidden,
-                         HttpResponseRedirect)
+from django.http import Http404
+from django.http import HttpResponse
+from django.http import HttpResponseForbidden
+from django.http import HttpResponseRedirect
 from django.template import loader
 
 from secretballot.utils import get_vote_model
@@ -10,7 +12,7 @@ from secretballot.utils import get_vote_model
 Vote = get_vote_model()
 
 
-def vote(
+def vote(  # noqa: C901, PLR0913, PLR0917, PLR0912
     request,
     content_type,
     object_id,
@@ -26,9 +28,8 @@ def vote(
 
     # get the token from a SecretBallotMiddleware
     if not hasattr(request, "secretballot_token"):
-        raise ImproperlyConfigured(
-            "To use secretballot a SecretBallotMiddleware must be installed. (see secretballot/middleware.py)"
-        )
+        msg = "To use secretballot a SecretBallotMiddleware must be installed. (see secretballot/middleware.py)"  # noqa: E501
+        raise ImproperlyConfigured(msg)
     token = request.secretballot_token
 
     if isinstance(content_type, ContentType):
@@ -39,7 +40,8 @@ def vote(
         app, modelname = content_type.split(".")
         content_type = ContentType.objects.get(app_label=app, model__iexact=modelname)
     else:
-        raise ValueError("content_type must be an instance of ContentType, a model, or \"app.modelname\" string")
+        msg = 'content_type must be an instance of ContentType, a model, or "app.modelname" string'  # noqa: E501
+        raise ValueError(msg)
 
     # do the action
     if vote:
@@ -53,21 +55,32 @@ def vote(
                 return HttpResponseForbidden("vote was forbidden")
 
         vobj, new = Vote.objects.get_or_create(
-            content_type=content_type, object_id=object_id, token=token, defaults={"vote": vote}
+            content_type=content_type,
+            object_id=object_id,
+            token=token,
+            defaults={"vote": vote},
         )
         if not new:
             vobj.vote = vote
             vobj.save()
     else:
-        Vote.objects.filter(content_type=content_type, object_id=object_id, token=token).delete()
+        Vote.objects.filter(
+            content_type=content_type,
+            object_id=object_id,
+            token=token,
+        ).delete()
 
     # build the response
     if redirect_url:
         return HttpResponseRedirect(redirect_url)
-    elif template_name:
+    if template_name:
         # get_object_for_this_type uses _base_manager, but we only set
         # _default_manager. Drop to lower level API.
-        content_obj = content_type.model_class()._default_manager.using(content_type._state.db).get(pk=object_id)
+        content_obj = (
+            content_type.model_class()  # noqa: SLF001
+            ._default_manager.using(content_type._state.db)  # noqa: SLF001
+            .get(pk=object_id)
+        )
         c = {"content_obj": content_obj}
 
         # copy extra_context into context, calling any callables
@@ -81,7 +94,10 @@ def vote(
         t = template_loader.get_template(template_name)
         body = t.render(c, request)
     else:
-        votes = Vote.objects.filter(content_type=content_type, object_id=object_id).count()
-        body = '{"num_votes":%d}' % votes
+        votes = Vote.objects.filter(
+            content_type=content_type,
+            object_id=object_id,
+        ).count()
+        body = f'{{"num_votes":{votes}}}'
 
     return HttpResponse(body, content_type=mimetype)

@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 # -- Project information -----------------------------------------------------
 
 project = 'django-secretballot'
-copyright = '2021, Basil Shubin'
+copyright = '2026, Basil Shubin'
 author = 'Basil Shubin'
 
 # The full version, including alpha/beta/rc tags

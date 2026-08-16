@@ -1,0 +1,31 @@
+# .readthedocs.yaml
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required
+version: 2
+
+# Set the version of Python and other tools you might need
+build:
+  os: ubuntu-lts-latest
+  tools:
+    python: "3.13"
+    # You can also specify other tool versions:
+    # nodejs: "16"
+    # rust: "1.55"
+    # golang: "1.17"
+
+# Build documentation in the docs/ directory with Sphinx
+sphinx:
+   configuration: docs/source/conf.py
+
+# Install docs dependencies (sphinx, sphinx-rtd-theme -- kept in sync with
+# the "sphinx"/"sphinx-rtd-theme" pins in pyproject.toml's dev dependency
+# group, used for local docs builds via `uv run --group dev`)
+python:
+   install:
+      - requirements: docs/requirements.txt
+
+# If using Sphinx, optionally build your docs in additional formats such as PDF
+# formats:
+#    - pdf
