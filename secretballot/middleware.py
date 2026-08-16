@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from hashlib import md5
 
 
@@ -35,5 +34,9 @@ class SecretBallotUserIdMiddleware(SecretBallotMiddleware):
 
 class SecretBallotIpUseragentMiddleware(SecretBallotMiddleware):
     def generate_token(self, request):
-        s = u"".join((request.META["REMOTE_ADDR"], request.META.get("HTTP_USER_AGENT", "")))
-        return md5(s.encode("utf-8")).hexdigest()
+        s = "".join(
+            (request.META["REMOTE_ADDR"], request.headers.get("User-Agent", "")),
+        )
+        # not used for security purposes, just to fold (ip, user-agent) into
+        # a compact, opaque token
+        return md5(s.encode("utf-8"), usedforsecurity=False).hexdigest()
