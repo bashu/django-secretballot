@@ -6,17 +6,18 @@
 django-secretballot documentation
 =================================
 
-.. image:: https://img.shields.io/pypi/v/django-secretballot.svg
+.. image:: https://badge.fury.io/py/django-secretballot.svg
+    :target: https://badge.fury.io/py/django-secretballot
+
+.. image:: https://img.shields.io/pypi/pyversions/django-secretballot.svg
     :target: https://pypi.python.org/pypi/django-secretballot/
 
-.. image:: https://img.shields.io/pypi/dm/django-secretballot.svg
+.. image:: https://img.shields.io/pypi/djversions/django-secretballot.svg
     :target: https://pypi.python.org/pypi/django-secretballot/
 
-.. image:: https://img.shields.io/github/license/bashu/django-secretballot.svg
-    :target: https://pypi.python.org/pypi/django-secretballot/
+.. image:: https://github.com/bashu/django-secretballot/actions/workflows/test.yml/badge.svg
+    :target: https://github.com/bashu/django-secretballot/actions/workflows/test.yml
 
-.. image:: https://img.shields.io/travis/bashu/django-secretballot.svg
-    :target: https://travis-ci.com/github/bashu/django-secretballot/
 
 Django voting application that allows voting without a logged in user.
 
