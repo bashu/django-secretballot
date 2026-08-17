@@ -1,6 +1,11 @@
 Changes
 -------
 
+2.0.2 (2026-08-17)
+------------------
+
+- switch docs badges to badge.fury.io and GitHub Actions
+
 2.0.1 (2026-08-16)
 ------------------
 
