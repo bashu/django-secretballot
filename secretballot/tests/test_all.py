@@ -27,7 +27,7 @@ def get_response_empty(request):
     return HttpResponse()
 
 
-class MiddlewareTestCase(TestCase):
+class SecretBallotMiddlewareTest(TestCase):
     def test_ip_middleware(self):
         mw = SecretBallotIpMiddleware(get_response_empty)
 
@@ -89,7 +89,7 @@ class MiddlewareTestCase(TestCase):
         assert token == "fdb9f3e35ac8355e1e97f338f0ede097"  # noqa:  S105
 
 
-class TestVoting(TestCase):
+class SecretBallotModelTest(TestCase):
     def test_add_vote(self):
         link = Link.objects.create(url="https://google.com")
         assert Link.objects.get().vote_total == 0
@@ -174,7 +174,7 @@ class TestVoting(TestCase):
         )
 
 
-class TestVotingWithRenamedFields(TestCase):
+class SecretBallotRenamedTest(TestCase):
     def test_everything_is_renamed(self):
         # one big example to surface any issues in renaming fields
         link = WeirdLink.objects.create(url="https://google.com")
@@ -210,7 +210,7 @@ class TestVotingWithRenamedFields(TestCase):
         assert link._secretballot_enabled is True  # noqa: SLF001
 
 
-class TestVoteView(TestCase):
+class SecretBallotViewTest(TestCase):
     def _req(self):
         r = HttpRequest()
         r.secretballot_token = "1.2.3.4"  # noqa:  S105
@@ -326,7 +326,7 @@ class TestVoteView(TestCase):
         assert json.loads(resp.content.decode("utf8"))["num_votes"] == 1
 
 
-class AddSecretBallotManagerTestCase(TestCase):
+class SecretBallotManagerTest(TestCase):
     """
     secret_ballot manager should be added to model specified
     in enable_voting_on(). Use `objects` as default for the
