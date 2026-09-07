@@ -164,6 +164,6 @@ ini_options.addopts = [ "--ds=secretballot.tests.settings", "--reuse-db", "--imp
 
 # ==== Coverage ====
 [tool.coverage]
+run.source = [ "secretballot" ]
 run.omit = [ "*/migrations/*", "*/tests/*" ]
 run.relative_files = true
-run.source = [ "secretballot" ]
