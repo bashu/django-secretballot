@@ -57,6 +57,7 @@ dev = [
 
 [tool.setuptools]
 packages.find.include = [ "secretballot*" ]
+packages.find.exclude = [ "secretballot.tests*" ]
 include-package-data = true
 dynamic.readme = { file = [ "README.rst", "CHANGES.rst" ], content-type = "text/x-rst" }
 zip-safe = false
