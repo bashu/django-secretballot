@@ -4,12 +4,12 @@ requires = [ "setuptools>=61" ]
 
 [project]
 name = "django-secretballot"
-version = "2.0.2"
+version = "2.0.3"
 description = "Django anonymous voting application."
 license = "BSD-3-Clause"
 maintainers = [ { name = "Basil Shubin", email = "basil.shubin@gmail.com" } ]
 authors = [ { name = "James Turk", email = "dev@jamesturk.net" } ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Web Environment",
@@ -21,11 +21,11 @@ classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Topic :: Internet :: WWW/HTTP",
   "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
   "Topic :: Software Development :: Libraries :: Python Modules",
@@ -40,15 +40,15 @@ urls.homepage = "https://github.com/bashu/django-secretballot/"
 
 [dependency-groups]
 dev = [
-  "coverage==7.15.4",
-  "django-stubs[compatible-mypy]==6.0.9",
-  "django-upgrade==1.31.1",
-  "mypy==2.3.0",
+  "coverage==7.16.2",
+  "django-stubs[compatible-mypy]==6.1.2",
+  "django-upgrade==1.33.0",
+  "mypy==2.4.0",
   "pre-commit==4.6.2",
   "pytest==9.1.1",
   "pytest-django==4.14.0",
   "pytest-sugar==1.1.1",
-  "ruff==0.16.2",
+  "ruff==0.16.10",
   "sphinx==8.1.3",
   "sphinx-autobuild==2024.10.3",
   "sphinx-rtd-theme==3.1.0",
@@ -56,6 +56,7 @@ dev = [
 
 [tool.setuptools]
 packages.find.include = [ "secretballot*" ]
+packages.find.exclude = [ "secretballot.tests*" ]
 include-package-data = true
 dynamic.readme = { file = [ "README.rst", "CHANGES.rst" ], content-type = "text/x-rst" }
 zip-safe = false
@@ -137,7 +138,7 @@ keep_full_version = true
 # ==== mypy ====
 [tool.mypy]
 ignore_missing_imports = true
-python_version = "3.14"
+python_version = "3.15"
 check_untyped_defs = true
 warn_redundant_casts = true
 warn_unused_ignores = true
@@ -164,6 +165,6 @@ ini_options.addopts = [ "--ds=secretballot.tests.settings", "--reuse-db", "--imp
 
 # ==== Coverage ====
 [tool.coverage]
+run.source = [ "secretballot" ]
 run.omit = [ "*/migrations/*", "*/tests/*" ]
 run.relative_files = true
-run.source = [ "secretballot" ]
