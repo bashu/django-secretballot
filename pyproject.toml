@@ -42,7 +42,7 @@ urls.homepage = "https://github.com/bashu/django-secretballot/"
 [dependency-groups]
 dev = [
   "coverage==7.16.2",
-  "django-stubs[compatible-mypy]==6.0.9",
+  "django-stubs[compatible-mypy]==6.1.2",
   "django-upgrade==1.33.0",
   "mypy==2.4.0",
   "pre-commit==4.6.2",
