@@ -48,9 +48,9 @@ dev = [
   "pytest==9.1.1",
   "pytest-django==4.14.0",
   "pytest-sugar==1.1.1",
-  "ruff==0.16.10",
+  "ruff==0.17.0",
   "sphinx==9.0.4",
-  "sphinx-autobuild==2024.10.3",
+  "sphinx-autobuild==2025.8.25",
   "sphinx-rtd-theme==3.1.0",
 ]
 
