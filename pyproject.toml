@@ -44,7 +44,7 @@ dev = [
   "django-stubs[compatible-mypy]==6.1.2",
   "django-upgrade==1.33.0",
   "mypy==2.4.0",
-  "pre-commit==4.6.2",
+  "pre-commit==4.7.0",
   "pytest==9.1.1",
   "pytest-django==4.14.0",
   "pytest-sugar==1.1.1",
