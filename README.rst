@@ -17,7 +17,7 @@ Django voting application that allows voting without a logged in user.
 
 Provides abstract base model for types that the user wishes to allow voting on as well as related utilities including generic views to ease the addition of 'anonymous' voting to a Django project.
 
-Maintained by `Basil Shubin <https://github.com/bashu/>`_, and some great
+Maintained by `Basil Shubin <https://github.com/bashu/>`_ (who is available for freelance/contract work), and some great
 `contributors <https://github.com/bashu/django-secretballot/contributors>`_.
 
 Documentation
